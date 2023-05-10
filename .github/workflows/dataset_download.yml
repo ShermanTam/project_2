@@ -1,6 +1,17 @@
 name: Python CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      epoch_number:
+        description: 'Epoch number'
+        required: true
+        default: '10'
+        type: choice
+        options:
+          - 10
+          - 20
+          - 50
   push:
     branches:
       - main
@@ -14,15 +25,17 @@ jobs:
 
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.11.2
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
 
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: pip install -r requirements.txt # Replace with your dependencies
+        run: pip install -r requirements.txt
 
       - name: Run Python script
-        run: python ImageCaptionGenerator.py # Replace with your script file name
+        run: python ImageCaptionGenerator.py
