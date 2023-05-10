@@ -40,6 +40,11 @@ jobs:
         run: |
           pipenv install --deploy --dev --verbose
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
       - name: Run Python script
         env:
           EPOCH_NUMBER: ${{ inputs.epoch_number }}
