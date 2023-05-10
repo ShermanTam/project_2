@@ -48,9 +48,9 @@ jobs:
   
       - name: Select option
         id: select_option
-        run: echo "::set-output name=selected_option::{${{ github.event.inputs.selected_option }}"
+        run: echo "SELECTED_OPTION=${{ github.event.inputs.selected_option }}" >> $GITHUB_ENV
 
       - name: Run Python script
-        run: python ImageCaptionGenerator.py${{ steps.select_option.outputs.selected_option }}
+        run: python ImageCaptionGenerator.py $SELECTED_OPTION
 
 

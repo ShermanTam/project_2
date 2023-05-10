@@ -30,10 +30,11 @@ import json
 from PIL import Image
 import pickle
 
-import sys
+import os
 
-selected_option = sys.argv[1]
+selected_option = os.environ.get('SELECTED_OPTION')
 print("Selected option:", selected_option)
+# You can use the selected_option variable in your Python script as needed
 
 ## Data Preprocessing
 # class Preprocessor:
