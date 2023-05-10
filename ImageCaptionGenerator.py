@@ -32,8 +32,10 @@ import pickle
 
 import os
 
-selected_option = os.environ.get('SELECTED_OPTION')
-print("Selected option:", selected_option)
+epoch_number = os.environ.get('EPOCH_NUMBER')
+print("Epoch number:", epoch_number)
+# You can use the epoch_number variable in your Python script as needed
+
 # You can use the selected_option variable in your Python script as needed
 
 ## Data Preprocessing

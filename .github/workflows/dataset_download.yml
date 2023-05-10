@@ -32,9 +32,6 @@ jobs:
           python-version: '3.9'
           cache: "pipenv"
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Install pipenv
         run: |
          python -m pip install --upgrade pipenv wheel
@@ -43,14 +40,9 @@ jobs:
         run: |
           pipenv install --deploy --dev --verbose
 
-      - name: Checkout repository
-        uses: actions/checkout@v2
-  
-      - name: Select option
-        id: select_option
-        run: echo "SELECTED_OPTION=${{ github.event.inputs.selected_option }}" >> $GITHUB_ENV
-
       - name: Run Python script
-        run: python ImageCaptionGenerator.py $SELECTED_OPTION
+        env:
+          EPOCH_NUMBER: ${{ inputs.epoch_number }}
+        run: python ImageCaptionGenerator.py $EPOCH_NUMBER
 
 
