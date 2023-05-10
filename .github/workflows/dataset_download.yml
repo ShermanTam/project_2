@@ -25,16 +25,31 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          cache: "pipenv"
 
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install pipenv
+        run: |
+         python -m pip install --upgrade pipenv wheel
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pipenv install --deploy --dev --verbose
+
+      # - name: Install dependencies
+      #   run: | 
+      #     python -m pip install git+https://github.com/Anaconda-Platform/anaconda-project
+      #     pip install --upgrade pip
+      #     pip install -r requirements.txt
 
       - name: Run Python script
         run: python ImageCaptionGenerator.py
