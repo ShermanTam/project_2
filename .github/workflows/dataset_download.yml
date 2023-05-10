@@ -12,19 +12,17 @@ on:
           - 10
           - 20
           - 50
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if:  ${{ inputs.epoch_number }} 
     steps:
-      - uses: actions/checkout@v3
+      - name: "Executing for Epoch ${{ inputs.epoch_number }}"
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -44,12 +42,6 @@ jobs:
       - name: Install dependencies
         run: |
           pipenv install --deploy --dev --verbose
-
-      # - name: Install dependencies
-      #   run: | 
-      #     python -m pip install git+https://github.com/Anaconda-Platform/anaconda-project
-      #     pip install --upgrade pip
-      #     pip install -r requirements.txt
 
       - name: Run Python script
         run: python ImageCaptionGenerator.py
