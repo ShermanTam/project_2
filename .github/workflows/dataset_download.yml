@@ -43,5 +43,14 @@ jobs:
         run: |
           pipenv install --deploy --dev --verbose
 
+      - name: Checkout repository
+        uses: actions/checkout@v2
+  
+      - name: Select option
+        id: select_option
+        run: echo "::set-output name=selected_option::{${{ github.event.inputs.selected_option }}"
+
       - name: Run Python script
-        run: python ImageCaptionGenerator.py
+        run: python ImageCaptionGenerator.py${{ steps.select_option.outputs.selected_option }}
+
+
