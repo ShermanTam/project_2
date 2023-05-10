@@ -22,13 +22,13 @@ output_file_path = "download_ds_file.zip"
 subprocess.call(["wget", "-O", output_file_path, url])
 
 ## Importing Libraries
-import tensorflow as tf
-import numpy as np
-import os
-import time
-import json
-from PIL import Image
-import pickle
+# import tensorflow as tf
+# import numpy as np
+# import os
+# import time
+# import json
+# from PIL import Image
+# import pickle
 
 import os
 
