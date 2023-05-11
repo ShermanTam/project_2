@@ -64,9 +64,9 @@ jobs:
         run: |
           pipenv install --deploy --dev --verbose
 
-      # https://drive.google.com/file/d/1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO/view?usp=share_link
+      
       - name: Download text file
-        un: curl -L -o download_ds_file.zip ""https://drive.google.com/file/d/1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO/view?usp=sharing"
+        run: curl -L -o download_ds_file.zip "https://drive.google.com/file/d/1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO/view?usp=sharing"
 
       - name: Set up Node.js
         uses: actions/setup-node@v2

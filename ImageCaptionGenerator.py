@@ -65,7 +65,7 @@ import subprocess
 import zipfile
 
 # Extract the zip file
-zip_file_name = "download_ds_file.zip"
+zip_file_path = "download_ds_file.zip"
 file_to_access = "Flickr8k.token.txt"
 
 # Extract the file from the zip file
