@@ -21,42 +21,10 @@ print("Model Type:",  os.environ.get('MODEL_TYPE'))
 #Required Libraries 
 import subprocess
 
-# Section for retrieving image zip folder
-#------------------------------------------------
-# Define the URL and file ID
-
-
-# print("Retrieving Image zip folder")
-# url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-# file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-# # Define the output file path
-# output_file_path = "download_ds_file.zip"
-
-
-# Download the file using wget command
-# subprocess.call(["wget", "-O", output_file_path, url])
-
-# gdown.download(url, output_file_path, quiet=False)
-# print("Image zip folder retrieved")
-#------------------------------------------------
-
-
-#------------------------------------------------
-
 # Section for unziping text zip folder
 #-----------------------------------------------------------       
 #Required Libraries 
 import zipfile
-# File names
-# zip_file_path = "download_ds_file.zip"
-# file_to_access = "Flickr8k.token.txt"
-
-# with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-#         with zip_ref.open(file_to_access) as file:
-#             content = file.read()
-#             print(content)
-            # return(content)
-
 #----------------------------------------------------------- 
 # 
 #
@@ -72,7 +40,6 @@ def load_captions(zip_file_path,file_to_access):
 #-----------------------------------------------------------       
 
 #-----------------------------------------------------------       
-
 # Each photo has a unique identifier, which is the file name of the image .jpg file
 # Create a dictionary of photo identifiers (without the .jpg) to captions. Each photo identifier maps to
 # a list of one or more textual descriptions.
@@ -117,7 +84,7 @@ image_dict = captions_dict (doc)
 # images to be used for training, validation or testing respectively
 #
 # Given a file, we return a set of image names (without .jpg extension) in that file
-#--------------------------------------------------
+#-----------------------------------------------------------
 def subset_image_name (train_img_txt):
   data = []
   ## Converting Bytes to string
@@ -141,3 +108,34 @@ training_imgname_doc = load_captions("download_ds_file.zip","Flickr_8k.trainImag
 training_image_names = subset_image_name (training_imgname_doc)
 print(training_image_names)
 #-----------------------------------------------------------       
+
+#-----------------------------------------------------------
+# Clean the captions data
+#    Convert all words to lowercase.
+#    Remove all punctuation.
+#    Remove all words that are one character or less in length (e.g. ‘a’).
+#    Remove all words with numbers in them.
+#-----------------------------------------------------------
+def captions_clean (image_dict):
+  # <key> is the image_name, which can be ignored
+  for key, captions in image_dict.items():
+    # Loop through each caption for this image
+    for i, caption in enumerate (captions):
+      
+      # Convert the caption to lowercase, and then remove all special characters from it
+      caption_nopunct = re.sub(r"[^a-zA-Z0-9]+", ' ', caption.lower())
+      
+      # Split the caption into separate words, and collect all words which are more than 
+      # one character and which contain only alphabets (ie. discard words with mixed alpha-numerics)
+      clean_words = [word for word in caption_nopunct.split() if ((len(word) > 1) and (word.isalpha()))]
+      
+      # Join those words into a string
+      caption_new = ' '.join(clean_words)
+      
+      print("Old caption:",captions[i])
+      # Replace the old caption in the captions list with this new cleaned caption
+      captions[i] = caption_new
+      print("New caption:",captions[i])
+#-----------------------------------------------------------
+print("Preprocessing captions")
+captions_clean (image_dict)
