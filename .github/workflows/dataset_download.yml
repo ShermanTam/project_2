@@ -18,9 +18,22 @@ on:
         default: '10'
         type: choice
         options:
+          - 2
+          - 5
           - 10
-          - 20
           - 50
+
+      batch_size:
+        description: 'Batch Size'
+        required: true
+        default: '14'
+        type: choice
+        options:
+          - 5
+          - 10
+          - 14
+          - 20
+          - 32
 
       
   # push:
@@ -60,6 +73,7 @@ jobs:
         env:
           MODEL_TYPE: ${{ inputs.model_type }}
           EPOCH_NUMBER: ${{ inputs.epoch_number }}
-        run: python ImageCaptionGenerator.py $MODEL_TYPE $EPOCH_NUMBER
+          BATCH_NUMBER: ${{ inputs.batch_number }}
+        run: python ImageCaptionGenerator.py $MODEL_TYPE $EPOCH_NUMBER $BATCH_NUMBER
 
 
