@@ -148,13 +148,19 @@ import numpy as np
 from tqdm import tqdm
 
 print("Extracting images:")
-with zipfile.ZipFile(extracted_images.zip, "r") as zip_ref:
-  # List all the files in the zip
-  file_list = zip_ref.namelist()
 
-  # Access individual files in the zip
-  for file_name in file_list:
-        print(file_name)
+with zipfile.ZipFile('download_img_file.zip', 'r') as zip_ref:
+    zip_ref.extractall('extracted_images')
+    print("zip file extracted")
+
+
+# with zipfile.ZipFile(extracted_images.zip, "r") as zip_ref:
+#   # List all the files in the zip
+#   file_list = zip_ref.namelist()
+
+#   # Access individual files in the zip
+#   for file_name in file_list:
+#         print(file_name)
         # with zip_ref.open(file_name) as file:
         #   image_data = file.read()
 
