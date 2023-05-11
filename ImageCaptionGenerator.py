@@ -1,5 +1,5 @@
 import urllib.request
-import gdown
+# import gdown
 
 
 # # URL of the Flickr8k dataset folder or file
