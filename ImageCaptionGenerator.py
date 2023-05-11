@@ -60,11 +60,21 @@ def load_captions (filename):
     return (text)
 
 # Extract the zip file
+text_file_name = "Flickr8k.token.txt"
 with zipfile.ZipFile(output_file_path, 'r') as zip_ref:
-    extracted_captionfile_path = zip_ref.extract('Flickr8k.token.txt', path='.')
+    # Check if the text file exists in the zip file
+    if text_file_name in zip_ref.namelist():
+        # Extract the specific text file
+        zip_ref.extract(text_file_name)
+        extracted_file_path = text_file_name
+    else:
+        print("Text file not found in the zip file.")
 
-doc = load_captions(extracted_captionfile_path)
-
+# Read the contents of the extracted file if it was found
+if extracted_file_path:
+    with open(extracted_file_path, 'r') as file:
+        text = file.read()
+        print(text)
 # Get current working directory
 # cwd = os.getcwd()
 # # Print current working directory
