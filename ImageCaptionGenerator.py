@@ -80,6 +80,8 @@ def load_captions(zip_file_path,file_to_access):
 #--------------------------------------------------
 def captions_dict (text):
   dict = {}
+  ## Converting Bytes to string
+  text = text.decode('utf-8')
   # Make a List of each line in the file
   lines = text.split ('\n')
   for line in lines:
