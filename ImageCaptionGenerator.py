@@ -43,7 +43,7 @@ file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 # Define the output file path
 output_text_file_path = "download_text_file.zip"
 # Download the file using wget command
-subprocess.call(["wget", "-O", output_file_path, url])
+subprocess.call(["wget", "-O", output_text_file_path, url])
 print("Text zip folder retrieved")
 #------------------------------------------------
 
