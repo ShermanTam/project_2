@@ -2,7 +2,16 @@ name: Python CI
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs:  
+      model_type:
+        description: 'Model type'
+        required: true
+        default: 'LSTM'
+        type: choice
+        options:
+          - LSTM
+          - Attention
+      
       epoch_number:
         description: 'Epoch number'
         required: true
@@ -12,15 +21,6 @@ on:
           - 10
           - 20
           - 50
-        
-      model_type:
-        description: 'Model type'
-        required: true
-        default: 'LSTM'
-        type: choice
-        options:
-          - LSTM
-          - Attention
 
       
   # push:
@@ -58,8 +58,8 @@ jobs:
 
       - name: Run Python script
         env:
-          EPOCH_NUMBER: ${{ inputs.epoch_number }}
           MODEL_TYPE: ${{ inputs.model_type }}
-        run: python ImageCaptionGenerator.py $EPOCH_NUMBER $MODEL_TYPE
+          EPOCH_NUMBER: ${{ inputs.epoch_number }}
+        run: python ImageCaptionGenerator.py $MODEL_TYPE $EPOCH_NUMBER
 
 
