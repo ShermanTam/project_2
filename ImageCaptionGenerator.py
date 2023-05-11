@@ -26,37 +26,38 @@ import subprocess
 # Section for retrieving image zip folder
 #------------------------------------------------
 # Define the URL and file ID
-print("Retrieving Image zip folder")
-url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-# Define the output file path
-output_file_path = "download_ds_file.zip"
+
+
+# print("Retrieving Image zip folder")
+# url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+# file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+# # Define the output file path
+# output_file_path = "download_ds_file.zip"
+
+
 # Download the file using wget command
 # subprocess.call(["wget", "-O", output_file_path, url])
-gdown.download(url, output_file_path, quiet=False)
 
-print("Image zip folder retrieved")
+# gdown.download(url, output_file_path, quiet=False)
+# print("Image zip folder retrieved")
 #------------------------------------------------
 
 # Section for retrieving text zip folder
 #------------------------------------------------
 # Define the URL and file ID
-print("Retrieving Text zip folder")
-url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-# Define the output file path
-output_text_file_path = "download_text_file.zip"
-# Download the file using wget command
-# subprocess.call(["wget", "-O", output_text_file_path, url])
-# wget.download(url, out=output_text_file_path)
-gdown.download(url, output_text_file_path, quiet=False)
-print("Text zip folder retrieved")
+# print("Retrieving Text zip folder")
+
+# url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+# file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+# # Define the output file path
+# output_text_file_path = "download_text_file.zip"
+# # Download the file using wget command
+# # subprocess.call(["wget", "-O", output_text_file_path, url])
+# # wget.download(url, out=output_text_file_path)
+# gdown.download(url, output_text_file_path, quiet=False)
+
+# print("Text zip folder retrieved")
 #------------------------------------------------
-
-
-
-print("output file=", output_text_file_path)
-
 
 # Section for unziping text zip folder
 #------------------------------------------------
@@ -64,25 +65,15 @@ print("output file=", output_text_file_path)
 import zipfile
 
 # Extract the zip file
-text_file_name = "Flickr8k.token.txt"
-with zipfile.ZipFile(output_text_file_path, 'r') as zip_ref:
-    # Check if the text file exists in the zip file
-    if text_file_name in zip_ref.namelist():
-        # Extract the specific text file
-        zip_ref.extract(text_file_name)
-        extracted_file_path = text_file_name
-    else:
-        print("Text file not found in the zip file.")
+zip_file_name = "download_ds_file.zip"
+file_to_access = "Flickr8k.token.txt"
 
-# Read the contents of the extracted file if it was found
-if extracted_file_path:
-    with open(extracted_file_path, 'r') as file:
-        text = file.read()
-        print(text)
-# Get current working directory
-# cwd = os.getcwd()
-# # Print current working directory
-# print("Current working directory is:", cwd)
+# Extract the file from the zip file
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+    with zip_ref.open(file_to_access) as file:
+        content = file.read()
+        # Process the file content as needed
+        print(content)
 
 
 
