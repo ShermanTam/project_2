@@ -119,6 +119,7 @@ training_image_names = subset_image_name (training_imgname_doc)
 ## Required Libraries
 import re
 def captions_clean (image_dict):
+      print_count=0
       # <key> is the image_name, which can be ignored
       for key, captions in image_dict.items():
             # Loop through each caption for this image
@@ -130,10 +131,15 @@ def captions_clean (image_dict):
                   clean_words = [word for word in caption_nopunct.split() if ((len(word) > 1) and (word.isalpha()))]
                   # Join those words into a string
                   caption_new = ' '.join(clean_words)
-                  print("\t Old caption:",captions[i])
+                  if print_count<=10:
+                        print("\t Old caption:",captions[i])
+                  
                   # Replace the old caption in the captions list with this new cleaned caption
                   captions[i] = caption_new
-                  print("\t New caption:",captions[i])
+                  if print_count<=10:
+                        print("\t New caption:",captions[i])
+                  
+                  print_count += 1
 #-----------------------------------------------------------
 print("Preprocessing captions:")
 captions_clean (image_dict)
