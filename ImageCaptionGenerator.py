@@ -1,4 +1,6 @@
 import urllib.request
+import gdown
+
 
 # # URL of the Flickr8k dataset folder or file
 # dataset_url = "https://drive.google.com/drive/folders/1WNHl00Xuxh8-R2-VpJR5GLKszBkCOX83?usp=share_link"
@@ -30,7 +32,9 @@ file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 # Define the output file path
 output_file_path = "download_ds_file.zip"
 # Download the file using wget command
-subprocess.call(["wget", "-O", output_file_path, url])
+# subprocess.call(["wget", "-O", output_file_path, url])
+gdown.download(url, output_file_path, quiet=False)
+
 print("Image zip folder retrieved")
 #------------------------------------------------
 
@@ -43,9 +47,16 @@ file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 # Define the output file path
 output_text_file_path = "download_text_file.zip"
 # Download the file using wget command
-subprocess.call(["wget", "-O", output_text_file_path, url])
+# subprocess.call(["wget", "-O", output_text_file_path, url])
+# wget.download(url, out=output_text_file_path)
+gdown.download(url, output_text_file_path, quiet=False)
 print("Text zip folder retrieved")
 #------------------------------------------------
+
+
+
+print("output file=", output_text_file_path)
+
 
 # Section for unziping text zip folder
 #------------------------------------------------
