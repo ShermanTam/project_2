@@ -155,7 +155,17 @@ captions_clean (image_dict)
 
 print("Extracting images:")
 
-with zipfile.ZipFile('download_img_file.zip', 'r') as zip_ref:
-    zip_ref.extractall('extracted_images')
-    print("zip file extracted")
+# with zipfile.ZipFile('download_img_file.zip', 'r') as zip_ref:
+#     zip_ref.extractall('extracted_images')
+#     print("zip file extracted")
 
+
+zip_path = "extracted_images.zip"  # Path to the extracted zip file
+
+with zipfile.ZipFile(zip_path, "r") as zip_ref:
+    # List all the files in the zip
+    file_list = zip_ref.namelist()
+
+    # Access individual files in the zip
+    for file_name in file_list:
+        print(file_name)

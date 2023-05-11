@@ -67,6 +67,9 @@ jobs:
       - name: Download text file
         run: curl -L -o download_ds_file.zip "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 
+      - name: Delete existing file
+        run: rm -f download_img_file.zip
+      
       - name: Download Image file
         run: curl -L -o download_img_file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 
