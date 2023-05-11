@@ -173,13 +173,30 @@ print("Extracting images:")
 # import zipfile
 
 # Specify the path to the downloaded ZIP file
-zip_path = 'download_img_file.zip'
+# zip_path = 'download_img_file.zip'
 
-# Specify the directory where you want to extract the images
-extract_dir = 'extracted_images'
+# # Specify the directory where you want to extract the images
+# extract_dir = 'extracted_images'
 
-# Extract the ZIP file
-with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-    zip_ref.extractall(extract_dir)
+# # Extract the ZIP file
+# with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+#     zip_ref.extractall(extract_dir)
 
-print('ZIP file extracted.')
+# print('ZIP file extracted.')
+
+import requests
+import zipfile
+import io
+
+def download_and_extract(url, dest):
+    response = requests.get(url)
+    zipped_file = zipfile.ZipFile(io.BytesIO(response.content))
+    zipped_file.extractall(dest)
+    zipped_file.close()
+
+
+zip_url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+extract_to_destination = "extracted_images"
+
+download_and_extract(zip_url, extract_to_destination)
+
