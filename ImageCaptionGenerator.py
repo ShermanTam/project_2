@@ -106,7 +106,7 @@ def subset_image_name (train_img_txt):
 print("Retrieving names of training images from text file")
 training_imgname_doc = load_captions("download_ds_file.zip","Flickr_8k.trainImages.txt")
 training_image_names = subset_image_name (training_imgname_doc)
-print(training_image_names)
+# print(training_image_names)
 #-----------------------------------------------------------       
 
 #-----------------------------------------------------------
@@ -117,25 +117,23 @@ print(training_image_names)
 #    Remove all words with numbers in them.
 #-----------------------------------------------------------
 def captions_clean (image_dict):
-  # <key> is the image_name, which can be ignored
-  for key, captions in image_dict.items():
-    # Loop through each caption for this image
-    for i, caption in enumerate (captions):
-      
-      # Convert the caption to lowercase, and then remove all special characters from it
-      caption_nopunct = re.sub(r"[^a-zA-Z0-9]+", ' ', caption.lower())
-      
-      # Split the caption into separate words, and collect all words which are more than 
-      # one character and which contain only alphabets (ie. discard words with mixed alpha-numerics)
-      clean_words = [word for word in caption_nopunct.split() if ((len(word) > 1) and (word.isalpha()))]
-      
-      # Join those words into a string
-      caption_new = ' '.join(clean_words)
-      
-      print("Old caption:",captions[i])
-      # Replace the old caption in the captions list with this new cleaned caption
-      captions[i] = caption_new
-      print("New caption:",captions[i])
+      import re
+      # <key> is the image_name, which can be ignored
+      for key, captions in image_dict.items():
+            # Loop through each caption for this image
+            for i, caption in enumerate (captions):
+            
+            # Convert the caption to lowercase, and then remove all special characters from it
+            caption_nopunct = re.sub(r"[^a-zA-Z0-9]+", ' ', caption.lower())
+            # Split the caption into separate words, and collect all words which are more than 
+            # one character and which contain only alphabets (ie. discard words with mixed alpha-numerics)
+            clean_words = [word for word in caption_nopunct.split() if ((len(word) > 1) and (word.isalpha()))]
+            # Join those words into a string
+            caption_new = ' '.join(clean_words)
+            print("Old caption:",captions[i])
+            # Replace the old caption in the captions list with this new cleaned caption
+            captions[i] = caption_new
+            print("New caption:",captions[i])
 #-----------------------------------------------------------
 print("Preprocessing captions")
 captions_clean (image_dict)
