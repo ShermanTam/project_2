@@ -1,27 +1,53 @@
 import urllib.request
 
 # # URL of the Flickr8k dataset folder or file
-# dataset_url = "https://example.com/path/to/flickr8k_dataset.zip"
+# dataset_url = "https://drive.google.com/drive/folders/1WNHl00Xuxh8-R2-VpJR5GLKszBkCOX83?usp=share_link"
 
-# # Define the local path to save the dataset in the GitHub repository workspace
-# local_path = "/path/in/github/repository/flickr8k_dataset.zip"
 
-# # Download the dataset file from the online source
-# urllib.request.urlretrieve(dataset_url, local_path)
-
+#--------------------------------------------------
+# The Flickr8k dataset have two main zip files- Images zip file & Captions zip file
+# Retrieving the Flickr8k dataset folder using the file ids
+# {"image_name_1" : ["caption 1", "caption 2", "caption 3"],
+#  "image_name_2" : ["caption 4", "caption 5"]}
+#--------------------------------------------------
 import subprocess
 
+# Section for unziping image zip folder
+#------------------------------------------------
 # Define the URL and file ID
+print("Unziping Image zip folder")
 url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-
 # Define the output file path
 output_file_path = "download_ds_file.zip"
-
 # Download the file using wget command
 subprocess.call(["wget", "-O", output_file_path, url])
+print("Extracted Image zip folder")
+#------------------------------------------------
 
-## Importing Libraries
+# Section for unziping text zip folder
+#------------------------------------------------
+# Define the URL and file ID
+print("Unziping Text zip folder")
+url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+# Define the output file path
+output_file_path = "download_text_file.zip"
+# Download the file using wget command
+subprocess.call(["wget", "-O", output_file_path, url])
+print("Extracted Text zip folder")
+#------------------------------------------------
+
+# Receiving Input variables from Github Repository Action
+#------------------------------------------------
+import os
+print("Epoch number:", os.environ.get('EPOCH_NUMBER'))
+print("Batch number:", os.environ.get('BATCH_SIZE'))
+print("Model Type:",  os.environ.get('MODEL_TYPE'))
+#------------------------------------------------
+
+
+# Importing Libraries
 # import tensorflow as tf
 # import numpy as np
 # import os
@@ -29,15 +55,6 @@ subprocess.call(["wget", "-O", output_file_path, url])
 # import json
 # from PIL import Image
 # import pickle
-
-import os
-
-print("Epoch number:", os.environ.get('EPOCH_NUMBER'))
-print("Batch number:", os.environ.get('BATCH_SIZE'))
-print("Model Type:",  os.environ.get('MODEL_TYPE'))
-# You can use the epoch_number variable in your Python script as needed
-
-# You can use the selected_option variable in your Python script as needed
 
 ## Data Preprocessing
 # class Preprocessor:
