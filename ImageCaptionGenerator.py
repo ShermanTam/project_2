@@ -129,10 +129,10 @@ def captions_clean (image_dict):
                   clean_words = [word for word in caption_nopunct.split() if ((len(word) > 1) and (word.isalpha()))]
                   # Join those words into a string
                   caption_new = ' '.join(clean_words)
-                  print("Old caption:",captions[i])
+                  print("\t Old caption:",captions[i])
                   # Replace the old caption in the captions list with this new cleaned caption
                   captions[i] = caption_new
-                  print("New caption:",captions[i])
+                  print("\t New caption:",captions[i])
 #-----------------------------------------------------------
-print("Preprocessing captions")
+print("Preprocessing captions:")
 captions_clean (image_dict)
