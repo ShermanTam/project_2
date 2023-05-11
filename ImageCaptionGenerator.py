@@ -52,12 +52,12 @@ print("Text zip folder retrieved")
 #Required Libraries 
 import zipfile
 
-#Reading Caption Contents
-def load_captions (filename):
-    with open(filename, "r") as fp:
-    # Read all text in the file
-    text = fp.read()
-    return (text)
+# #Reading Caption Contents
+# def load_captions (filename):
+#     with open(filename, "r") as fp:
+#     # Read all text in the file
+#     text = fp.read()
+#     return (text)
 
 # Extract the zip file
 text_file_name = "Flickr8k.token.txt"
