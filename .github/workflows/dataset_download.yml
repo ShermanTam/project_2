@@ -70,6 +70,11 @@ jobs:
       - name: Download Image file
         run: curl -L -o download_img_file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 
+      - name: Extract Zip file
+        run: |
+          mkdir extracted_images
+          unzip -j download_img_file.zip -d extracted_images
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
