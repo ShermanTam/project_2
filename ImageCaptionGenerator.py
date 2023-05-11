@@ -1,6 +1,4 @@
 import urllib.request
-# import gdown
-
 
 # # URL of the Flickr8k dataset folder or file
 # dataset_url = "https://drive.google.com/drive/folders/1WNHl00Xuxh8-R2-VpJR5GLKszBkCOX83?usp=share_link"
@@ -42,42 +40,67 @@ import subprocess
 # print("Image zip folder retrieved")
 #------------------------------------------------
 
-# Section for retrieving text zip folder
-#------------------------------------------------
-# Define the URL and file ID
-# print("Retrieving Text zip folder")
 
-# url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-# file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-# # Define the output file path
-# output_text_file_path = "download_text_file.zip"
-# # Download the file using wget command
-# # subprocess.call(["wget", "-O", output_text_file_path, url])
-# # wget.download(url, out=output_text_file_path)
-# gdown.download(url, output_text_file_path, quiet=False)
-
-# print("Text zip folder retrieved")
 #------------------------------------------------
 
 # Section for unziping text zip folder
-#------------------------------------------------
+#-----------------------------------------------------------       
 #Required Libraries 
 import zipfile
+# File names
+# zip_file_path = "download_ds_file.zip"
+# file_to_access = "Flickr8k.token.txt"
 
-# Extract the zip file
-zip_file_path = "download_ds_file.zip"
-file_to_access = "Flickr8k.token.txt"
+#----------------------------------------------------------- 
+# 
+#
+#
+#--------------------------------------------------
+def load_captions(zip_file_path,file_to_access):
+    # Extract the file from the zip file
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        with zip_ref.open(file_to_access) as file:
+            content = file.read()
+            return(content)
+#-----------------------------------------------------------       
 
-# Extract the file from the zip file
-with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-    with zip_ref.open(file_to_access) as file:
-        content = file.read()
-        # Process the file content as needed
-        print(content)
+#--------------------------------------------------
+# Each photo has a unique identifier, which is the file name of the image .jpg file
+# Create a dictionary of photo identifiers (without the .jpg) to captions. Each photo identifier maps to
+# a list of one or more textual descriptions.
+#
+# {"image_name_1" : ["caption 1", "caption 2", "caption 3"],
+#  "image_name_2" : ["caption 4", "caption 5"]}
+#--------------------------------------------------
+def captions_dict (text):
+  dict = {}
+  # Make a List of each line in the file
+  lines = text.split ('\n')
+  for line in lines:
+    # Split into the <image_data> and <caption>
+    line_split = line.split ('\t')
+    if (len(line_split) != 2):
+      # Added this check because dataset contains some blank lines
+      continue
+    else:
+      image_data, caption = line_split
+    # Split into <image_file> and <caption_idx>
+    image_file, caption_idx = image_data.split ('#')
+    # Split the <image_file> into <image_name>.jpg
+    image_name = image_file.split ('.')[0]
+    # If this is the first caption for this image, create a new list for that
+    # image and add the caption to it. Otherwise append the caption to the 
+    # existing list
+    if (int(caption_idx) == 0):
+      dict [image_name] = [caption]
+    else:
+      dict [image_name].append (caption)
+  return (dict)
 
-
-
-
+print("Loading Text File")
+doc = load_captions ("download_ds_file.zip","Flickr8k.token.txt")
+image_dict = captions_dict (doc)
+print(image_dict)
 
 # Importing Libraries
 # import tensorflow as tf
