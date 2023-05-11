@@ -160,12 +160,26 @@ print("Extracting images:")
 #     print("zip file extracted")
 
 
-zip_path = "extracted_images.zip"  # Path to the extracted zip file
+# zip_path = "extracted_images.zip"  # Path to the extracted zip file
 
-with zipfile.ZipFile(zip_path, "r") as zip_ref:
-    # List all the files in the zip
-    file_list = zip_ref.namelist()
+# with zipfile.ZipFile(zip_path, "r") as zip_ref:
+#     # List all the files in the zip
+#     file_list = zip_ref.namelist()
 
-    # Access individual files in the zip
-    for file_name in file_list:
-        print(file_name)
+#     # Access individual files in the zip
+#     for file_name in file_list:
+#         print(file_name)
+
+# import zipfile
+
+# Specify the path to the downloaded ZIP file
+zip_path = 'download_img_file.zip'
+
+# Specify the directory where you want to extract the images
+extract_dir = 'extracted_images'
+
+# Extract the ZIP file
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
+
+print('ZIP file extracted.')
