@@ -3,41 +3,6 @@ import urllib.request
 # # URL of the Flickr8k dataset folder or file
 # dataset_url = "https://drive.google.com/drive/folders/1WNHl00Xuxh8-R2-VpJR5GLKszBkCOX83?usp=share_link"
 
-
-#--------------------------------------------------
-# The Flickr8k dataset have two main zip files- Images zip file & Captions zip file
-# Retrieving the Flickr8k dataset folder using the file ids
-# {"image_name_1" : ["caption 1", "caption 2", "caption 3"],
-#  "image_name_2" : ["caption 4", "caption 5"]}
-#--------------------------------------------------
-import subprocess
-
-# Section for unziping image zip folder
-#------------------------------------------------
-# Define the URL and file ID
-print("Unziping Image zip folder")
-url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-# Define the output file path
-output_file_path = "download_ds_file.zip"
-# Download the file using wget command
-subprocess.call(["wget", "-O", output_file_path, url])
-print("Extracted Image zip folder")
-#------------------------------------------------
-
-# Section for unziping text zip folder
-#------------------------------------------------
-# Define the URL and file ID
-print("Unziping Text zip folder")
-url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
-# Define the output file path
-output_file_path = "download_text_file.zip"
-# Download the file using wget command
-subprocess.call(["wget", "-O", output_file_path, url])
-print("Extracted Text zip folder")
-#------------------------------------------------
-
 # Receiving Input variables from Github Repository Action
 #------------------------------------------------
 import os
@@ -45,6 +10,68 @@ print("Epoch number:", os.environ.get('EPOCH_NUMBER'))
 print("Batch number:", os.environ.get('BATCH_SIZE'))
 print("Model Type:",  os.environ.get('MODEL_TYPE'))
 #------------------------------------------------
+
+#--------------------------------------------------
+# The Flickr8k dataset have two main zip files- Images zip file & Captions zip file
+# Retrieving the Flickr8k dataset folder using the file ids
+# {"image_name_1" : ["caption 1", "caption 2", "caption 3"],
+#  "image_name_2" : ["caption 4", "caption 5"]}
+#--------------------------------------------------
+
+#Required Libraries 
+import subprocess
+
+# Section for retrieving image zip folder
+#------------------------------------------------
+# Define the URL and file ID
+print("Retrieving Image zip folder")
+url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+file_id = "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+# Define the output file path
+output_file_path = "download_ds_file.zip"
+# Download the file using wget command
+subprocess.call(["wget", "-O", output_file_path, url])
+print("Image zip folder retrieved")
+#------------------------------------------------
+
+# Section for retrieving text zip folder
+#------------------------------------------------
+# Define the URL and file ID
+print("Retrieving Text zip folder")
+url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+# Define the output file path
+output_file_path = "download_text_file.zip"
+# Download the file using wget command
+subprocess.call(["wget", "-O", output_file_path, url])
+print("Text zip folder retrieved")
+#------------------------------------------------
+
+# Section for unziping text zip folder
+#------------------------------------------------
+#Required Libraries 
+import zipfile
+
+#Reading Caption Contents
+def load_captions (filename):
+    with open(filename, "r") as fp:
+    # Read all text in the file
+    text = fp.read()
+    return (text)
+
+# Extract the zip file
+with zipfile.ZipFile(output_file_path, 'r') as zip_ref:
+    extracted_captionfile_path = zip_ref.extract('Flickr8k.token.txt', path='.')
+
+doc = load_captions(extracted_captionfile_path)
+
+# Get current working directory
+# cwd = os.getcwd()
+# # Print current working directory
+# print("Current working directory is:", cwd)
+
+
+
 
 
 # Importing Libraries
