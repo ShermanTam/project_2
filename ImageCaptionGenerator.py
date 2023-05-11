@@ -41,7 +41,7 @@ print("Retrieving Text zip folder")
 url = "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 file_id = "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 # Define the output file path
-output_file_path = "download_text_file.zip"
+output_text_file_path = "download_text_file.zip"
 # Download the file using wget command
 subprocess.call(["wget", "-O", output_file_path, url])
 print("Text zip folder retrieved")
@@ -52,16 +52,9 @@ print("Text zip folder retrieved")
 #Required Libraries 
 import zipfile
 
-# #Reading Caption Contents
-# def load_captions (filename):
-#     with open(filename, "r") as fp:
-#     # Read all text in the file
-#     text = fp.read()
-#     return (text)
-
 # Extract the zip file
 text_file_name = "Flickr8k.token.txt"
-with zipfile.ZipFile(output_file_path, 'r') as zip_ref:
+with zipfile.ZipFile(output_text_file_path, 'r') as zip_ref:
     # Check if the text file exists in the zip file
     if text_file_name in zip_ref.namelist():
         # Extract the specific text file
