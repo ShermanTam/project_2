@@ -147,7 +147,7 @@ import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
 
-print("PreprExocessing captions:")
+print("Extracting images:")
 with zipfile.ZipFile(extracted_images.zip, "r") as zip_ref:
   # List all the files in the zip
   file_list = zip_ref.namelist()
