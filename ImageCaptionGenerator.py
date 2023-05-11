@@ -149,9 +149,9 @@ captions_clean (image_dict)
 # Load images
 #-----------------------------------------------------------
 ## Required Libraries
-import tensorflow as tf
-import numpy as np
-from tqdm import tqdm
+# import tensorflow as tf
+# import numpy as np
+# from tqdm import tqdm
 
 print("Extracting images:")
 
