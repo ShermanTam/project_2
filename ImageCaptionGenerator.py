@@ -33,7 +33,11 @@ subprocess.call(["wget", "-O", output_file_path, url])
 import os
 
 epoch_number = os.environ.get('EPOCH_NUMBER')
+batch_number = os.environ.get('BATCH_NUMBER')
+model_type = os.environ.get('MODEL_TYPE')
 print("Epoch number:", epoch_number)
+print("Batch number:", batch_number)
+print("Model Type:", model_type)
 # You can use the epoch_number variable in your Python script as needed
 
 # You can use the selected_option variable in your Python script as needed
