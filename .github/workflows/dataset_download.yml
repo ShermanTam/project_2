@@ -73,7 +73,7 @@ jobs:
         env:
           MODEL_TYPE: ${{ inputs.model_type }}
           EPOCH_NUMBER: ${{ inputs.epoch_number }}
-          BATCH_NUMBER: ${{ inputs.batch_number }}
+          BATCH_SIZE: ${{ inputs.batch_size }}
         run: python ImageCaptionGenerator.py $MODEL_TYPE $EPOCH_NUMBER $BATCH_NUMBER
 
 
