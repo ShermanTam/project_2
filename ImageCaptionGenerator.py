@@ -48,13 +48,13 @@ import subprocess
 #Required Libraries 
 import zipfile
 # File names
-zip_file_path = "download_ds_file.zip"
-file_to_access = "Flickr8k.token.txt"
+# zip_file_path = "download_ds_file.zip"
+# file_to_access = "Flickr8k.token.txt"
 
-with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-        with zip_ref.open(file_to_access) as file:
-            content = file.read()
-            print(content)
+# with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+#         with zip_ref.open(file_to_access) as file:
+#             content = file.read()
+#             print(content)
             # return(content)
 
 #----------------------------------------------------------- 
@@ -62,12 +62,12 @@ with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
 #
 #
 #--------------------------------------------------
-# def load_captions(zip_file_path,file_to_access):
-#     # Extract the file from the zip file
-#     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-#         with zip_ref.open(file_to_access) as file:
-#             content = file.read()
-#             return(content)
+def load_captions(zip_file_path,file_to_access):
+    # Extract the file from the zip file
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        with zip_ref.open(file_to_access) as file:
+            content = file.read()
+            return(content)
 #-----------------------------------------------------------       
 
 #--------------------------------------------------
@@ -103,10 +103,10 @@ def captions_dict (text):
       dict [image_name].append (caption)
   return (dict)
 
-# print("Loading Text File")
-# doc = load_captions ("download_ds_file.zip","Flickr8k.token.txt")
-# image_dict = captions_dict (doc)
-# print(image_dict)
+print("Loading Text File")
+doc = load_captions ("download_ds_file.zip","Flickr8k.token.txt")
+image_dict = captions_dict (doc)
+print(image_dict)
 
 # Importing Libraries
 # import tensorflow as tf
