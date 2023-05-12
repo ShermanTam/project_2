@@ -202,9 +202,16 @@ import io
 
 # Access the extracted files
 # For example, you can list the files inside the extracted folder
-extracted_files = zipfile.ZipFile.namelist(zipfile.ZipFile("file.zip"))
 
-# Iterate over the extracted files
-for filename in extracted_files:
-      print(filename)
+# Extract the file from the zip file
+# with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+#   with zip_ref.open(file_to_access) as file:
+#     content = file.read()
+#     return(content)
+# import zipfile
+
+
+with zipfile.ZipFile(download_image_file, 'r') as zip_ref:
+  file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+  print(file_names)
 
