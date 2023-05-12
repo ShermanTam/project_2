@@ -71,8 +71,14 @@ jobs:
         run: |
           wget -O file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
       
-      - name: Extract ZIP file
-        run: 7z x file.zip
+      - name: Check if file exists
+        run: |
+          if [ -f "file.zip" ]; then
+            echo "File downloaded successfully."
+          else
+            echo "File download failed."
+            exit 1
+          fi
         
       - name: Set up Node.js
         uses: actions/setup-node@v2
