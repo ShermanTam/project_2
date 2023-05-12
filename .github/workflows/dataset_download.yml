@@ -70,8 +70,14 @@ jobs:
       - name: Download text file
         run: curl -L -o download_image_file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 
-      
-        
+      - name: Check if file exists
+        run: |
+          if [ -f "download_image_file.zip" ]; then
+            echo "File downloaded successfully."
+          else
+            echo "File download failed."
+            exit 1
+          fi
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
