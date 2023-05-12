@@ -210,8 +210,11 @@ import io
 #     return(content)
 # import zipfile
 
+def get_images(image_zip_filepath):
+      with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
+        file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+        return(file_names)
 
-with zipfile.ZipFile("download_image_file", 'r') as zip_ref:
-  file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-  print(file_names)
-
+image_zip_filepath="download_image_file.zip"
+images=get_images(image_zip_filepath)
+print(images)
