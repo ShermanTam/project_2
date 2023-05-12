@@ -190,7 +190,7 @@ import io
 
 def download_and_extract(url, dest):
     response = requests.get(url)
-    zipped_file = zipfile.ZipFile(io.BytesIO(response.content))
+    zipped_file = zipfile.ZipFile(io.BytesIO(response))
     zipped_file.extractall(dest)
     zipped_file.close()
 
