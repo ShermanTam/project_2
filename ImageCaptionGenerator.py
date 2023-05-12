@@ -75,7 +75,7 @@ def captions_dict (text):
   return (dict)
 
 print("Retrieving text files from zip folder")
-doc = load_captions ("download_ds_file.zip","Flickr8k.token.txt")
+doc = load_captions ("datasets/download_ds_file.zip","Flickr8k.token.txt")
 image_dict = captions_dict (doc)
 #-----------------------------------------------------------       
 
@@ -104,7 +104,7 @@ def subset_image_name (train_img_txt):
   return (set(data))  
 
 print("Retrieving names of training images from text file")
-training_imgname_doc = load_captions("download_ds_file.zip","Flickr_8k.trainImages.txt")
+training_imgname_doc = load_captions("datasets/download_ds_file.zip","Flickr_8k.trainImages.txt")
 training_image_names = subset_image_name (training_imgname_doc)
 # print(training_image_names)
 #-----------------------------------------------------------       
@@ -211,10 +211,10 @@ import io
 # import zipfile
 
 def get_images(image_zip_filepath):
-      with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
-        file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-        return(file_names)
+    with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
+      file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+      return(file_names)
 
-image_zip_filepath="download_image_file.zip"
+image_zip_filepath="datasets/download_image_file.zip"
 images=get_images(image_zip_filepath)
 print(images)

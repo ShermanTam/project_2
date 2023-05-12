@@ -1,1 +1,2 @@
-*.zip
+# Any zip files are not to be included
+*.zip*

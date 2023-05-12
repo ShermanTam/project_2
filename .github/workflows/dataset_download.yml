@@ -2,20 +2,20 @@ name: Python CI
 
 on:
   workflow_dispatch:
-    inputs:  
+    inputs:
       model_type:
-        description: 'Model type'
+        description: "Model type"
         required: true
-        default: 'LSTM'
+        default: "LSTM"
         type: choice
         options:
           - LSTM
           - Attention
-      
+
       epoch_number:
-        description: 'Epoch number'
+        description: "Epoch number"
         required: true
-        default: '10'
+        default: "10"
         type: choice
         options:
           - 2
@@ -24,9 +24,9 @@ on:
           - 50
 
       batch_size:
-        description: 'Batch Size'
+        description: "Batch Size"
         required: true
-        default: '14'
+        default: "14"
         type: choice
         options:
           - 5
@@ -34,16 +34,19 @@ on:
           - 14
           - 20
           - 32
-
-      
+  # For automated triggers;
   # push:
   #   branches:
   #     - main
+env:
+  FLICKER_8K_TEXT: "1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+  FLICKER_8K_IMAGE: "176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if:  ${{ inputs.epoch_number }} 
+
+    if: ${{ inputs.epoch_number }}
     steps:
       - name: "Executing for Epoch ${{ inputs.epoch_number }}"
         uses: actions/checkout@v3
@@ -53,35 +56,33 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
           cache: "pipenv"
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
       - name: Install pipenv
         run: |
-         python -m pip install --upgrade pipenv wheel
+          python -m pip install --upgrade pipenv wheel gdown
 
       - name: Install dependencies
         run: |
           pipenv install --deploy --dev --verbose
 
-      - name: Download text file
-        run: curl -L -o download_ds_file.zip "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+      - name: Download DS dataset
+        run: |
+          gdown "${{env.FLICKER_8K_TEXT}}" -O datasets/download_ds_file.zip
 
-      - name: Download text file
-        run: curl -L -o download_image_file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+      - name: Download Image dataset
+        run: |
+          gdown "${{env.FLICKER_8K_IMAGE}}" -O datasets/download_image_file.zip
 
       - name: Check if file exists
         run: |
-          if [ -f "download_image_file.zip" ]; then
-            echo "File downloaded successfully."
-          else
-            echo "File download failed."
-            exit 1
-          fi
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+          chmod +x scripts/ 
+          ./scripts/check_file_exists.sh datasets/*.zip
 
       - name: Run Python script
         env:
@@ -89,5 +90,3 @@ jobs:
           EPOCH_NUMBER: ${{ inputs.epoch_number }}
           BATCH_SIZE: ${{ inputs.batch_size }}
         run: pipenv run python ImageCaptionGenerator.py $MODEL_TYPE $EPOCH_NUMBER $BATCH_NUMBER
-
-

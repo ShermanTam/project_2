@@ -291,10 +291,10 @@
         },
         "jax": {
             "hashes": [
-                "sha256:1ed135cd08f48e4baf10f6eafdb4a4cdae781f9052b5838c09c91a9f4fa75f09"
+                "sha256:1bf0f2720f778f2937301a16a4d5cd3497f13a4d6c970c24a88918a81816a888"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==0.4.9"
+            "version": "==0.4.10"
         },
         "keras": {
             "hashes": [
