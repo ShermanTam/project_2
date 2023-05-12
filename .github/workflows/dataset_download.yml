@@ -75,6 +75,8 @@ jobs:
         run: |
           if [ -f "file.zip" ]; then
             echo "File downloaded successfully."
+            unzip file.zip
+            echo "File unzipped successfully."
           else
             echo "File download failed."
             exit 1
