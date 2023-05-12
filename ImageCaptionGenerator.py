@@ -188,15 +188,23 @@ import requests
 import zipfile
 import io
 
-def download_and_extract(url, dest):
-    response = requests.get(url)
-    zipped_file = zipfile.ZipFile(io.BytesIO(response))
-    zipped_file.extractall(dest)
-    zipped_file.close()
+# def download_and_extract(url, dest):
+#     response = requests.get(url)
+#     zipped_file = zipfile.ZipFile(io.BytesIO(response))
+#     zipped_file.extractall(dest)
+#     zipped_file.close()
 
 
-zip_url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-extract_to_destination = "extracted_images"
+# zip_url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+# extract_to_destination = "extracted_images"
 
-download_and_extract(zip_url, extract_to_destination)
+# download_and_extract(zip_url, extract_to_destination)
+
+# Access the extracted files
+# For example, you can list the files inside the extracted folder
+extracted_files = zipfile.ZipFile.namelist(zipfile.ZipFile("file.zip"))
+
+# Iterate over the extracted files
+for filename in extracted_files:
+      print(filename)
 

@@ -67,6 +67,13 @@ jobs:
       - name: Download text file
         run: curl -L -o download_ds_file.zip "https://drive.google.com/uc?export=download&id=1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
 
+      - name: Download ZIP file
+        run: |
+          wget -O file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+      
+      - name: Extract ZIP file
+        run: unzip file.zip
+        
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
