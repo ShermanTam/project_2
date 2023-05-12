@@ -211,7 +211,7 @@ import io
 # import zipfile
 
 
-with zipfile.ZipFile(download_image_file, 'r') as zip_ref:
+with zipfile.ZipFile("download_image_file", 'r') as zip_ref:
   file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
   print(file_names)
 
