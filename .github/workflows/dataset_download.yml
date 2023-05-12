@@ -72,7 +72,9 @@ jobs:
           wget -O file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
       
       - name: Extract ZIP file
-        run: unzip file.zip
+        run: |
+          apt install p7zip-full
+          7z x file.zip
         
       - name: Set up Node.js
         uses: actions/setup-node@v2
