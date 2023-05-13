@@ -161,11 +161,11 @@ import zipfile
 import io
 
 # Path to the extracted folder
-extracted_folder_path = "datasets/Flicker8k_Dataset"
+image_dir = "datasets/Flicker8k_Dataset"
 
 # List all files in the extracted folder
-file_names = os.listdir(extracted_folder_path)
-print(file_names)
+file_names = os.listdir(image_dir)
+# print(file_names)
 
 print("Images Extracted")
 
@@ -173,34 +173,41 @@ import tensorflow as tf
 from tqdm import tqdm
 import numpy as np
 
-# def load_image(image_path):
-#     img = tf.io.read_file(image_path)
-#     img = tf.image.decode_jpeg(img, channels=3)
-#     img = tf.image.resize(img, (299, 299))
-#     img = tf.keras.applications.inception_v3.preprocess_input(img)
-#     return img, image_path
+def load_image(image_path):
+    img = tf.io.read_file(image_path)
+    print("\t Decoding the image with 3 color channel")
+    img = tf.image.decode_jpeg(img, channels=3)
+    print("\t Resizing the image to (299, 299)")
+    img = tf.image.resize(img, (299, 299))
+    print("\t Pre built pre processing of Inception V3")
+    img = tf.keras.applications.inception_v3.preprocess_input(img)
+    return img, image_path
 
-# def process_image_dataset(image_dir, training_image_names):
-#     image_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
-#     new_input = image_model.input
-#     hidden_layer = image_model.layers[-1].output
-#     image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
+def process_image_dataset(image_dir, training_image_names):
+    print("Initializing Inception V3 model without the top classification layers")
+    image_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
+    print("Retrieving the input tensor 'new_input' and the output tensor of the last layer 'hidden_layer'")
+    new_input = image_model.input
+    hidden_layer = image_model.layers[-1].output
+    print("Creating new model using the created input and output")
+    image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
+    print("Creating training image path")
+    training_image_paths = [image_dir + name + '.jpg' for name in training_image_names]
+    encode_train = sorted(set(training_image_paths))
+    print("Creates a TensorFlow dataset, image_dataset, from the sorted training image paths")
+    image_dataset = tf.data.Dataset.from_tensor_slices(encode_train)
+    print("Pre-processing each image data:")
+    image_dataset = image_dataset.map(load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
 
-#     training_image_paths = [image_dir + name + '.jpg' for name in training_image_names]
-#     encode_train = sorted(set(training_image_paths))
+    print("Preparing the preprocessed images in groups of 16 in batches")
+    for img, path in tqdm(image_dataset):
+          print("Extracting image features on the batch of images")
+          batch_features = image_features_extract_model(img)
+          print("Reshaping extracted features")
+          batch_features = tf.reshape(batch_features, (batch_features.shape[0], -1, batch_features.shape[3]))
+          print("Saving the features as Numpy file")
+          for bf, p in zip(batch_features, path):
+                path_of_feature = p.numpy().decode("utf-8")
+                np.save(path_of_feature, bf.numpy())
 
-#     image_dataset = tf.data.Dataset.from_tensor_slices(encode_train)
-#     image_dataset = image_dataset.map(load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
-
-#     for img, path in tqdm(image_dataset):
-#         batch_features = image_features_extract_model(img)
-#         batch_features = tf.reshape(batch_features, (batch_features.shape[0], -1, batch_features.shape[3]))
-
-#         for bf, p in zip(batch_features, path):
-#             path_of_feature = p.numpy().decode("utf-8")
-#             np.save(path_of_feature, bf.numpy())
-
-# # Example usage:
-# image_dir = "/content/drive/MyDrive/Flickr8/Flicker8k_Dataset/"  # Add your list of training image names
-
-# # process_image_dataset(image_dir, training_image_names)
+process_image_dataset(image_dir, training_image_names)
