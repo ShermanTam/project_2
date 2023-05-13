@@ -298,3 +298,28 @@ def pad_text (text, max_length):
 training_dict = subset_data_dict (image_dict, training_image_names)
 # Prepare tokenizer
 tokenizer, vocab_size, max_caption_words = create_tokenizer(training_dict)
+from numpy import array
+def data_prep(data_dict, tokenizer, max_length, vocab_size):
+      X, y = list(), list()
+      # For each image and list of captions
+      for image_name, captions in data_dict.items():
+            image_name = image_dir + image_name + '.jpg'
+            # For each caption in the list of captions
+            for caption in captions:
+                  # Convert the caption words into a list of word indices
+                  word_idxs = tokenizer.texts_to_sequences([caption])[0]
+
+                  # Pad the input text to the same fixed length
+                  pad_idxs = pad_text(word_idxs, max_length)
+                      
+                  X.append(image_name)
+                  y.append(pad_idxs)
+          
+      return array(X), array(y)
+      return X, y
+
+train_X, train_y = data_prep(training_dict, tokenizer, max_caption_words, vocab_size)
+print(train_X)
+
+BATCH_SIZE = 64
+BUFFER_SIZE = 1000
