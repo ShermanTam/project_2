@@ -11,6 +11,7 @@ requests = "*"
 tokenizer = "*"
 pad-sequences = "*"
 keras = "*"
+"keras.preprocessing" = "*"
 
 [dev-packages]
 
