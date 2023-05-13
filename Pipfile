@@ -10,6 +10,7 @@ gdown = "*"
 requests = "*"
 tokenizer = "*"
 pad-sequences = "*"
+keras = "*"
 
 [dev-packages]
 
