@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5c6b32c1e15b1a21c159e1a6c6bc9200a560ac9d26fb2e2cad80ce9c63218358"
+            "sha256": "72e7538819bcd7f136131bbfc1282115de688299e25362c08b388502b04528c9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -461,6 +461,13 @@
             "markers": "python_version >= '3.7'",
             "version": "==23.1"
         },
+        "pad-sequences": {
+            "hashes": [
+                "sha256:36960d61e719d6e3edf62d483566c563b923deb3a0837b403c886ba1e1ef61c3"
+            ],
+            "index": "pypi",
+            "version": "==0.6.1"
+        },
         "protobuf": {
             "hashes": [
                 "sha256:03eee35b60317112a72d19c54d0bff7bc58ff12fea4cd7b018232bd99758ffdf",
@@ -651,6 +658,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.3.0"
+        },
+        "tokenizer": {
+            "hashes": [
+                "sha256:24c20445e9141010cff1b7e2c06caaf6ba2b5058cec4009cd3ceb06ea88cd329",
+                "sha256:ccdb52b947f6c99edf2b9ae090473f9600e7973f27af04e358ac846d36c93bfd"
+            ],
+            "index": "pypi",
+            "version": "==3.4.2"
         },
         "tqdm": {
             "hashes": [

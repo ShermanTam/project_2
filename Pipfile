@@ -8,6 +8,8 @@ tensorflow = "*"
 numpy = "*"
 gdown = "*"
 requests = "*"
+tokenizer = "*"
+pad-sequences = "*"
 
 [dev-packages]
 

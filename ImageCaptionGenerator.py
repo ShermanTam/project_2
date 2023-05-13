@@ -211,7 +211,7 @@ def process_image_dataset(image_dir, training_image_names):
     print("Extracting image features on the batch of images")
     print("Reshaping extracted features")
     print("Saving the features as Numpy file")
-    
+
     for img, path in tqdm(image_dataset):
           
           batch_features = image_features_extract_model(img)
@@ -223,3 +223,77 @@ def process_image_dataset(image_dir, training_image_names):
                 np.save(path_of_feature, bf.numpy())
 
 process_image_dataset(image_dir, training_image_names)
+
+#-----------------------------------------------------------
+# Load images
+#-----------------------------------------------------------
+## Required Libraries
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+import re
+
+#--------------------------------------------------
+# Add two tokens, 'startseq' and 'endseq' at the beginning and end respectively, 
+# of every caption
+#--------------------------------------------------
+def add_token (captions):
+      for i, caption in enumerate (captions):
+    captions[i] = 'startseq ' + caption + ' endseq'
+  return (captions)
+
+#--------------------------------------------------
+# Given a set of training, validation or testing image names, return a dictionary
+# containing the corresponding subset from the full dictionary of images with captions
+#
+# This returned subset has the same structure as the full dictionary
+# {"image_name_1" : ["caption 1", "caption 2", "caption 3"],
+#  "image_name_2" : ["caption 4", "caption 5"]}
+#--------------------------------------------------
+def subset_data_dict (image_dict, image_names):
+  dict = { image_name:add_token(captions) for image_name,captions in image_dict.items() if image_name in image_names}
+  return (dict)
+
+#--------------------------------------------------
+# Flat list of all captions
+#--------------------------------------------------
+def all_captions (data_dict):
+  return ([caption for key, captions in data_dict.items() for caption in captions])
+
+#--------------------------------------------------
+# Calculate the word-length of the caption with the most words
+#--------------------------------------------------
+def max_caption_length(captions):
+  return max(len(caption.split()) for caption in captions)
+
+#--------------------------------------------------
+# Fit a Keras tokenizer given caption descriptions
+# The tokenizer uses the captions to learn a mapping from words to numeric word indices
+#
+# Later, this tokenizer will be used to encode the captions as numbers
+#--------------------------------------------------
+def create_tokenizer(data_dict):
+  captions = all_captions(data_dict)
+  max_caption_words = max_caption_length(captions)
+  
+  # Initialise a Keras Tokenizer
+  tokenizer = Tokenizer()
+  
+  # Fit it on the captions so that it prepares a vocabulary of all words
+  tokenizer.fit_on_texts(captions)
+  
+  # Get the size of the vocabulary
+  vocab_size = len(tokenizer.word_index) + 1
+
+  return (tokenizer, vocab_size, max_caption_words)
+
+#--------------------------------------------------
+# Extend a list of text indices to a given fixed length
+#--------------------------------------------------
+def pad_text (text, max_length): 
+  text = pad_sequences([text], maxlen=max_length, padding='post')[0]
+  
+  return (text)
+
+training_dict = subset_data_dict (image_dict, training_image_names)
+# Prepare tokenizer
+tokenizer, vocab_size, max_caption_words = create_tokenizer(training_dict)
