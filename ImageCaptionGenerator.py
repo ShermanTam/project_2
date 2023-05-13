@@ -149,72 +149,60 @@ captions_clean (image_dict)
 # Load images
 #-----------------------------------------------------------
 ## Required Libraries
-# import tensorflow as tf
-# import numpy as np
-# from tqdm import tqdm
+import tensorflow as tf
+import numpy as np
+from tqdm import tqdm
 
 print("Extracting images:")
 
-# with zipfile.ZipFile('download_img_file.zip', 'r') as zip_ref:
-#     zip_ref.extractall('extracted_images')
-#     print("zip file extracted")
-
-
-# zip_path = "extracted_images.zip"  # Path to the extracted zip file
-
-# with zipfile.ZipFile(zip_path, "r") as zip_ref:
-#     # List all the files in the zip
-#     file_list = zip_ref.namelist()
-
-#     # Access individual files in the zip
-#     for file_name in file_list:
-#         print(file_name)
-
-# import zipfile
-
-# Specify the path to the downloaded ZIP file
-# zip_path = 'download_img_file.zip'
-
-# # Specify the directory where you want to extract the images
-# extract_dir = 'extracted_images'
-
-# # Extract the ZIP file
-# with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-#     zip_ref.extractall(extract_dir)
-
-# print('ZIP file extracted.')
 
 import requests
 import zipfile
 import io
 
-# def download_and_extract(url, dest):
-#     response = requests.get(url)
-#     zipped_file = zipfile.ZipFile(io.BytesIO(response))
-#     zipped_file.extractall(dest)
-#     zipped_file.close()
-
-
-# zip_url = "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
-# extract_to_destination = "extracted_images"
-
-# download_and_extract(zip_url, extract_to_destination)
-
-# Access the extracted files
-# For example, you can list the files inside the extracted folder
-
-# Extract the file from the zip file
-# with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-#   with zip_ref.open(file_to_access) as file:
-#     content = file.read()
-#     return(content)
-# import zipfile
-
 def get_images(image_zip_filepath):
     with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
       file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+      zip_ref.extractall("datasets")
       return(file_names)
-
+         
+# Path to the downloaded ZIP file
 image_zip_filepath="datasets/download_image_file.zip"
 images=get_images(image_zip_filepath)
-print(images)
+print("Images Extracted")
+
+import tensorflow as tf
+from tqdm import tqdm
+import numpy as np
+
+def load_image(image_path):
+    img = tf.io.read_file(image_path)
+    img = tf.image.decode_jpeg(img, channels=3)
+    img = tf.image.resize(img, (299, 299))
+    img = tf.keras.applications.inception_v3.preprocess_input(img)
+    return img, image_path
+
+def process_image_dataset(image_dir, training_image_names):
+    image_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
+    new_input = image_model.input
+    hidden_layer = image_model.layers[-1].output
+    image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
+
+    training_image_paths = [image_dir + name + '.jpg' for name in training_image_names]
+    encode_train = sorted(set(training_image_paths))
+
+    image_dataset = tf.data.Dataset.from_tensor_slices(encode_train)
+    image_dataset = image_dataset.map(load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
+
+    for img, path in tqdm(image_dataset):
+        batch_features = image_features_extract_model(img)
+        batch_features = tf.reshape(batch_features, (batch_features.shape[0], -1, batch_features.shape[3]))
+
+        for bf, p in zip(batch_features, path):
+            path_of_feature = p.numpy().decode("utf-8")
+            np.save(path_of_feature, bf.numpy())
+
+# Example usage:
+image_dir = "/content/drive/MyDrive/Flickr8/Flicker8k_Dataset/"  # Add your list of training image names
+
+process_image_dataset(image_dir, training_image_names)

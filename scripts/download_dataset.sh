@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Download the zip file from Google Drive
-wget -O file.zip "https://drive.google.com/uc?export=download&id=176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
+# For testing locally
+FLICKER_8K_TEXT="1sIxT8WrW21vaQvUY3BLGnnmAY-ocZhpO"
+FLICKER_8K_IMAGE="176wGCHHp2DpoDblsliEkX4fTpfQUbZOq"
 
-# Unzip or use the file in your code
-# ...
+gdown "$FLICKER_8K_TEXT" -O "datasets/download_ds_file.zip" &
+gdown "$FLICKER_8K_IMAGE" -O "datasets/download_image_file.zip" &
