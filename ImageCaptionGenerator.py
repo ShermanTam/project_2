@@ -229,7 +229,7 @@ process_image_dataset(image_dir, training_image_names)
 #-----------------------------------------------------------
 ## Required Libraries
 from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 
 #--------------------------------------------------
