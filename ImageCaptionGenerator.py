@@ -106,7 +106,7 @@ def subset_image_name (train_img_txt):
 print("Retrieving names of training images from text file")
 training_imgname_doc = load_captions("datasets/download_ds_file.zip","Flickr_8k.trainImages.txt")
 training_image_names = subset_image_name (training_imgname_doc)
-print(training_image_names)
+# print(training_image_names)
 #-----------------------------------------------------------       
 
 #-----------------------------------------------------------
