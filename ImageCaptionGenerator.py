@@ -238,8 +238,9 @@ import re
 #--------------------------------------------------
 def add_token (captions):
       for i, caption in enumerate (captions):
-    captions[i] = 'startseq ' + caption + ' endseq'
-  return (captions)
+            captions[i] = 'startseq ' + caption + ' endseq'
+      
+      return (captions)
 
 #--------------------------------------------------
 # Given a set of training, validation or testing image names, return a dictionary
@@ -250,20 +251,20 @@ def add_token (captions):
 #  "image_name_2" : ["caption 4", "caption 5"]}
 #--------------------------------------------------
 def subset_data_dict (image_dict, image_names):
-  dict = { image_name:add_token(captions) for image_name,captions in image_dict.items() if image_name in image_names}
-  return (dict)
+      dict = { image_name:add_token(captions) for image_name,captions in image_dict.items() if image_name in image_names}
+      return (dict)
 
 #--------------------------------------------------
 # Flat list of all captions
 #--------------------------------------------------
 def all_captions (data_dict):
-  return ([caption for key, captions in data_dict.items() for caption in captions])
+      return ([caption for key, captions in data_dict.items() for caption in captions])
 
 #--------------------------------------------------
 # Calculate the word-length of the caption with the most words
 #--------------------------------------------------
 def max_caption_length(captions):
-  return max(len(caption.split()) for caption in captions)
+      return max(len(caption.split()) for caption in captions)
 
 #--------------------------------------------------
 # Fit a Keras tokenizer given caption descriptions
@@ -272,19 +273,19 @@ def max_caption_length(captions):
 # Later, this tokenizer will be used to encode the captions as numbers
 #--------------------------------------------------
 def create_tokenizer(data_dict):
-  captions = all_captions(data_dict)
-  max_caption_words = max_caption_length(captions)
-  
-  # Initialise a Keras Tokenizer
-  tokenizer = Tokenizer()
-  
-  # Fit it on the captions so that it prepares a vocabulary of all words
-  tokenizer.fit_on_texts(captions)
-  
-  # Get the size of the vocabulary
-  vocab_size = len(tokenizer.word_index) + 1
+      captions = all_captions(data_dict)
+      max_caption_words = max_caption_length(captions)
+      
+      # Initialise a Keras Tokenizer
+      tokenizer = Tokenizer()
+      
+      # Fit it on the captions so that it prepares a vocabulary of all words
+      tokenizer.fit_on_texts(captions)
+      
+      # Get the size of the vocabulary
+      vocab_size = len(tokenizer.word_index) + 1
 
-  return (tokenizer, vocab_size, max_caption_words)
+      return (tokenizer, vocab_size, max_caption_words)
 
 #--------------------------------------------------
 # Extend a list of text indices to a given fixed length
