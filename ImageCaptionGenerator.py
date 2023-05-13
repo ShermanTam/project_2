@@ -160,15 +160,13 @@ import requests
 import zipfile
 import io
 
-def get_images(image_zip_filepath):
-    with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
-      file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-      # zip_ref.extractall("datasets")
-      return(file_names)
-         
-# Path to the downloaded ZIP file
-image_zip_filepath="datasets/download_image_file.zip"
-images=get_images(image_zip_filepath)
+# Path to the extracted folder
+extracted_folder_path = "datasets"
+
+# List all files in the extracted folder
+file_names = os.listdir(extracted_folder_path)
+print(file_names)
+
 print("Images Extracted")
 
 import tensorflow as tf
