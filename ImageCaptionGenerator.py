@@ -161,7 +161,7 @@ import zipfile
 import io
 
 # Path to the extracted folder
-extracted_folder_path = "datasets"
+extracted_folder_path = "datasets/Flicker8k_Dataset"
 
 # List all files in the extracted folder
 file_names = os.listdir(extracted_folder_path)
