@@ -208,12 +208,16 @@ def process_image_dataset(image_dir, training_image_names):
     image_dataset = image_dataset.map(load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
 
     print("Preparing the preprocessed images in groups of 16 in batches")
+    print("Extracting image features on the batch of images")
+    print("Reshaping extracted features")
+    print("Saving the features as Numpy file")
+    
     for img, path in tqdm(image_dataset):
-          print("Extracting image features on the batch of images")
+          
           batch_features = image_features_extract_model(img)
-          print("Reshaping extracted features")
+         
           batch_features = tf.reshape(batch_features, (batch_features.shape[0], -1, batch_features.shape[3]))
-          print("Saving the features as Numpy file")
+          
           for bf, p in zip(batch_features, path):
                 path_of_feature = p.numpy().decode("utf-8")
                 np.save(path_of_feature, bf.numpy())
