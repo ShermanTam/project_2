@@ -1,2 +1,4 @@
 # Any zip files are not to be included
 *.zip*
+!datasets/*.md
+datasets/*

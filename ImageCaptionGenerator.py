@@ -163,7 +163,7 @@ import io
 def get_images(image_zip_filepath):
     with zipfile.ZipFile(image_zip_filepath,'r') as zip_ref:
       file_names = [name for name in zip_ref.namelist() if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-      zip_ref.extractall("datasets")
+      # zip_ref.extractall("datasets")
       return(file_names)
          
 # Path to the downloaded ZIP file

@@ -79,6 +79,9 @@ jobs:
         run: |
           gdown "${{env.FLICKER_8K_IMAGE}}" -O datasets/download_image_file.zip
 
+      - name: Extract ZIP file
+        run: unzip datasets/download_image_file.zip -d datasets
+
       - name: Check if file exists
         run: |
           chmod +x scripts/ 
