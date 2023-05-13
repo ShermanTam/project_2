@@ -175,10 +175,13 @@ import numpy as np
 
 def load_image(image_path):
     img = tf.io.read_file(image_path)
+   
     print("\t Decoding the image with 3 color channel")
     img = tf.image.decode_jpeg(img, channels=3)
+    
     print("\t Resizing the image to (299, 299)")
     img = tf.image.resize(img, (299, 299))
+    
     print("\t Pre built pre processing of Inception V3")
     img = tf.keras.applications.inception_v3.preprocess_input(img)
     return img, image_path
@@ -186,16 +189,21 @@ def load_image(image_path):
 def process_image_dataset(image_dir, training_image_names):
     print("Initializing Inception V3 model without the top classification layers")
     image_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
+    
     print("Retrieving the input tensor 'new_input' and the output tensor of the last layer 'hidden_layer'")
     new_input = image_model.input
     hidden_layer = image_model.layers[-1].output
+    
     print("Creating new model using the created input and output")
     image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
+    
     print("Creating training image path")
-    training_image_paths = [image_dir + name + '.jpg' for name in training_image_names]
+    training_image_paths = [image_dir +'/'+ name + '.jpg' for name in training_image_names]
     encode_train = sorted(set(training_image_paths))
+    
     print("Creates a TensorFlow dataset, image_dataset, from the sorted training image paths")
     image_dataset = tf.data.Dataset.from_tensor_slices(encode_train)
+    
     print("Pre-processing each image data:")
     image_dataset = image_dataset.map(load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
 
