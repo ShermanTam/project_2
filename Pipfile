@@ -12,6 +12,7 @@ tokenizer = "*"
 pad-sequences = "*"
 keras = "*"
 "keras.preprocessing" = "*"
+tensorflow-io = "*"
 
 [dev-packages]
 

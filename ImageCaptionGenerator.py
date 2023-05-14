@@ -325,26 +325,34 @@ BATCH_SIZE = 64
 BUFFER_SIZE = 1000
 
 print("Map function")
-# Load the numpy files
-def map_func(img_name, cap):
-      print("Image_Name is:",img_name)
-      img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
-      print("Split Image_Name is:",img_name)
-      img_tensor = np.load(img_name + '.npy')
-      return img_tensor, cap
+# # Load the numpy files
+# def map_func(img_name, cap):
+#       img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
+#       img_tensor = np.load(img_name + '.npy')
+#       return img_tensor, cap
 
-dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
-print("dataset is",dataset)
+# dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
 
-# Use map to load the numpy files in parallel
-dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]),num_parallel_calls=tf.data.experimental.AUTOTUNE)
+# # Use map to load the numpy files in parallel
+# dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]),num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
-# Shuffle and batch
+# print("Shuffling dataset:",dataset)
+# # Shuffle and batch
+# dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+# dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+
+import tensorflow_io as tfio
+
+dataset = tf.data.Dataset.from_tensor_slices(train_X)
+dataset = dataset.map(lambda item: tfio.IODataset.from_npy(item), num_parallel_calls=tf.data.experimental.AUTOTUNE)
+dataset = dataset.zip((dataset, train_y))
+print("Shuffling dataset:",dataset)
 dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
 
 
 
+print("BahdanauAttention")
 class BahdanauAttention(tf.keras.Model):
       def __init__(self, units):
             super(BahdanauAttention, self).__init__()
