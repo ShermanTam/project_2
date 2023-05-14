@@ -327,13 +327,13 @@ BUFFER_SIZE = 1000
 print("Map function")
 # Load the numpy files
 def map_func(img_name, cap):
-      print(img_name)
+      print("Image_Name is:",img_name)
       img_name=img_name.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
       img_tensor = np.load(img_name.decode('utf-8')+ '.npy')
       return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
-print(dataset)
+print("dataset is",dataset)
 
 # Use map to load the numpy files in parallel
 dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]),num_parallel_calls=tf.data.experimental.AUTOTUNE)
