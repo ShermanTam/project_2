@@ -328,9 +328,9 @@ print("Map function")
 # Load the numpy files
 def map_func(img_name, cap):
       print("Image_Name is:",img_name)
-      img_name=img_name.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
-      print(img_name)
-      img_tensor = np.load(img_name.decode('utf-8')+ '.npy')
+      img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
+      print("Split Image_Name is:",img_name)
+      img_tensor = np.load(img_name + '.npy')
       return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
