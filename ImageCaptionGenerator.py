@@ -324,6 +324,7 @@ train_X, train_y = data_prep(training_dict, tokenizer, max_caption_words, vocab_
 BATCH_SIZE = 64
 BUFFER_SIZE = 1000
 
+print("Map function")
 # Load the numpy files
 def map_func(img_name, cap):
       print(img_name)
@@ -332,6 +333,7 @@ def map_func(img_name, cap):
       return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
+print(dataset)
 
 # Use map to load the numpy files in parallel
 dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]),num_parallel_calls=tf.data.experimental.AUTOTUNE)
