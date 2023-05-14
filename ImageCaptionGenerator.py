@@ -344,7 +344,7 @@ print("Map function")
 
 
 def map_func(img_name, cap):
-    img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
+    img_name = img_name.numpy().decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.numpy().decode('utf-8').split("Dataset")[1]
     img_tensor = tf.py_function(np.load, [img_name + '.npy'], tf.float32)
     return img_tensor, cap
 
