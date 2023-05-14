@@ -79,6 +79,12 @@ jobs:
         run: |
           gdown "${{env.FLICKER_8K_IMAGE}}" -O datasets/download_image_file.zip
 
+      - name: Cache Datasets
+        uses: actions/cache@v3
+        with:
+          repository: https://github.com/varshasrinivasan95/ImageCaptionGenerator
+          ref: refs/heads/main
+          path: datasets
       - name: Extract ZIP file
         run: unzip datasets/download_image_file.zip -d datasets
 
