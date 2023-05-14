@@ -326,6 +326,7 @@ BUFFER_SIZE = 1000
 
 # Load the numpy files
 def map_func(img_name, cap):
+      print(img_name)
       img_name=img_name.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
       img_tensor = np.load(img_name.decode('utf-8')+ '.npy')
       return img_tensor, cap
