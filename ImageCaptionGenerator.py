@@ -392,32 +392,32 @@ class RNN_Decoder(tf.keras.Model):
 
             self.attention = BahdanauAttention(self.units)
 
-  def call(self, x, features, hidden):
-        # defining attention as a separate model
-        context_vector, attention_weights = self.attention(features, hidden)
+      def call(self, x, features, hidden):
+            # defining attention as a separate model
+            context_vector, attention_weights = self.attention(features, hidden)
 
-        # x shape after passing through embedding == (batch_size, 1, embedding_dim)
-        x = self.embedding(x)
+            # x shape after passing through embedding == (batch_size, 1, embedding_dim)
+            x = self.embedding(x)
 
-        # x shape after concatenation == (batch_size, 1, embedding_dim + hidden_size)
-        x = tf.concat([tf.expand_dims(context_vector, 1), x], axis=-1)
+            # x shape after concatenation == (batch_size, 1, embedding_dim + hidden_size)
+            x = tf.concat([tf.expand_dims(context_vector, 1), x], axis=-1)
 
-        # passing the concatenated vector to the GRU
-        output, state = self.gru(x)
+            # passing the concatenated vector to the GRU
+            output, state = self.gru(x)
 
-        # shape == (batch_size, max_length, hidden_size)
-        x = self.fc1(output)
+            # shape == (batch_size, max_length, hidden_size)
+            x = self.fc1(output)
 
-        # x shape == (batch_size * max_length, hidden_size)
-        x = tf.reshape(x, (-1, x.shape[2]))
+            # x shape == (batch_size * max_length, hidden_size)
+            x = tf.reshape(x, (-1, x.shape[2]))
 
-        # output shape == (batch_size * max_length, vocab)
-        x = self.fc2(x)
+            # output shape == (batch_size * max_length, vocab)
+            x = self.fc2(x)
 
-        return x, state, attention_weights
+            return x, state, attention_weights
 
-  def reset_state(self, batch_size):
-        return tf.zeros((batch_size, self.units))
+      def reset_state(self, batch_size):
+            return tf.zeros((batch_size, self.units))
 
 embedding_dim = 256
 units = 512
