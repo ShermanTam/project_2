@@ -326,9 +326,8 @@ BUFFER_SIZE = 1000
 
 # Load the numpy files
 def map_func(img_name, cap):
-      path = img_name.decode('utf-8')
-      corrected_path=path.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
-      img_tensor = np.load(corrected_path + '.npy')
+      img_name=img_name.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
+      img_tensor = np.load(img_name.decode('utf-8')+ '.npy')
       return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
