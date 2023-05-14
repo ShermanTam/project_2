@@ -186,7 +186,7 @@ def load_image(image_path):
     img = tf.keras.applications.inception_v3.preprocess_input(img)
     return img, image_path
 
-training_image_paths 
+training_image_paths = []
 def process_image_dataset(image_dir, training_image_names):
     print("Initializing Inception V3 model without the top classification layers")
     image_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
