@@ -341,14 +341,20 @@ print("Map function")
 # dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 # dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
 
-import tensorflow_io as tfio
+
+
+def map_func(img_name, cap):
+    img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
+    img_tensor = np.load(img_name + '.npy')
+    return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices(train_X)
-dataset = dataset.map(lambda item: tfio.IODataset.from_npy(item), num_parallel_calls=tf.data.experimental.AUTOTUNE)
+dataset = dataset.map(lambda item: tf.numpy_function(map_func, [item, tf.constant(0)], [tf.float32, tf.int32]), num_parallel_calls=tf.data.experimental.AUTOTUNE)
 dataset = dataset.zip((dataset, train_y))
-print("Shuffling dataset:",dataset)
+print("Shuffling dataset:", dataset)
 dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+
 
 
 
