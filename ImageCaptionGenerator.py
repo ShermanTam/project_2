@@ -319,7 +319,20 @@ def data_prep(data_dict, tokenizer, max_length, vocab_size):
       return X, y
 
 train_X, train_y = data_prep(training_dict, tokenizer, max_caption_words, vocab_size)
-print(train_X)
 
 BATCH_SIZE = 64
 BUFFER_SIZE = 1000
+
+# Load the numpy files
+def map_func(img_name, cap):
+      img_tensor = np.load(img_name.decode('utf-8')+'.npy')
+      return img_tensor, cap
+
+dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y))
+
+# Use map to load the numpy files in parallel
+dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]),num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+# Shuffle and batch
+dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
