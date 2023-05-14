@@ -344,18 +344,19 @@ print("Map function")
 
 
 def map_func(img_name, cap):
-      img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
-      img_tensor = np.load(img_name + '.npy')
-      return img_tensor, cap
+    img_name = img_name.decode('utf-8').split("Dataset")[0] + "Dataset/" + img_name.decode('utf-8').split("Dataset")[1]
+    img_tensor = tf.py_function(np.load, [img_name + '.npy'], tf.float32)
+    return img_tensor, cap
 
 def generator():
-      for x, y in zip(train_X, train_y):
-            yield x, y
+    for x, y in zip(train_X, train_y):
+        yield x, y
 
 dataset = tf.data.Dataset.from_generator(generator, (tf.string, tf.int32))
-dataset = dataset.map(lambda item1, item2: tf.numpy_function(map_func, [item1, item2], [tf.float32, tf.int32]), num_parallel_calls=tf.data.experimental.AUTOTUNE)
+dataset = dataset.map(lambda item1, item2: (tf.numpy_function(map_func, [item1, item2], tf.float32), item2), num_parallel_calls=tf.data.experimental.AUTOTUNE)
 dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+
 
 
 
