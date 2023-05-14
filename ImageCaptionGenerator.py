@@ -329,6 +329,7 @@ print("Map function")
 def map_func(img_name, cap):
       print("Image_Name is:",img_name)
       img_name=img_name.split("Dataset")[0] + "Dataset/" + path.split("Dataset")[1]
+      print(img_name)
       img_tensor = np.load(img_name.decode('utf-8')+ '.npy')
       return img_tensor, cap
 
