@@ -455,7 +455,8 @@ encoder = CNN_Encoder(embedding_dim)
 decoder = RNN_Decoder(embedding_dim, units, vocab_size)
 
 optimizer = tf.keras.optimizers.Adam()
-loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True, reduction='none')
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
+    from_logits=True, reduction='none')
 
 def loss_function(real, pred):
       mask = tf.math.logical_not(tf.math.equal(real, 0))
@@ -466,8 +467,8 @@ def loss_function(real, pred):
 
       return tf.reduce_mean(loss_)
 
-      loss_plot = []
-      @tf.function
+loss_plot = []
+@tf.function
 def train_step(img_tensor, target):
       loss = 0
       # initializing the hidden state for each batch
@@ -477,15 +478,15 @@ def train_step(img_tensor, target):
       dec_input = tf.expand_dims([tokenizer.word_index['startseq']] * target.shape[0], 1)
 
       with tf.GradientTape() as tape:
-            features = encoder(img_tensor)
-            for i in range(1, target.shape[1]):
-                  # passing the features through the decoder
-                  predictions, hidden, _ = decoder(dec_input, features, hidden)
+        features = encoder(img_tensor)
+        for i in range(1, target.shape[1]):
+              # passing the features through the decoder
+              predictions, hidden, _ = decoder(dec_input, features, hidden)
 
-                  loss += loss_function(target[:, i], predictions)
+              loss += loss_function(target[:, i], predictions)
 
-                  # using teacher forcing
-                  dec_input = tf.expand_dims(target[:, i], 1)
+              # using teacher forcing
+              dec_input = tf.expand_dims(target[:, i], 1)
 
       total_loss = (loss / int(target.shape[1]))
 
@@ -512,7 +513,7 @@ for epoch in range(start_epoch, EPOCHS):
             if batch % 100 == 0:
                   average_batch_loss = batch_loss.numpy()/int(target.shape[1])
                   print(f'Epoch {epoch+1} Batch {batch} Loss {average_batch_loss:.4f}')
-            # storing the epoch end loss value to plot later
+        # storing the epoch end loss value to plot later
       loss_plot.append(total_loss / num_steps)
 
       print(f'Epoch {epoch+1} Loss {total_loss/num_steps:.6f}')
@@ -526,8 +527,8 @@ def evaluate(image, max_length):
       temp_input = tf.expand_dims(load_image(image)[0], 0)
       img_tensor_val = image_features_extract_model(temp_input)
       img_tensor_val = tf.reshape(img_tensor_val, (img_tensor_val.shape[0],
-      -1,
-      img_tensor_val.shape[3]))
+                                                      -1,
+                                                      img_tensor_val.shape[3]))
 
       features = encoder(img_tensor_val)
 
@@ -536,8 +537,8 @@ def evaluate(image, max_length):
 
       for i in range(max_length):
             predictions, hidden, attention_weights = decoder(dec_input,
-            features,
-            hidden)
+                                                            features,
+                                                            hidden)
 
             attention_plot[i] = tf.reshape(attention_weights, (-1, )).numpy()
 
@@ -551,7 +552,7 @@ def evaluate(image, max_length):
 
       attention_plot = attention_plot[:len(result), :]
       return result, attention_plot
- 
+  
 def check_test(test_image_names, image_dict, image_dir, max_caption_words):
       # captions on the validation set
       rid = np.random.randint(0, len(test_image_names))
@@ -565,11 +566,11 @@ def check_test(test_image_names, image_dict, image_dir, max_caption_words):
       #display(Image(image_path))
       print('Real Caption:', real_caption)
       print('Prediction Caption:', ' '.join(result))
- 
+      
 test_image_name_file = "/content/drive/MyDrive/Flickr8/Flickr8k_text/Flickr_8k.testImages.txt"
 test_image_names = subset_image_name_test(test_image_name_file)
 image_dir = "/content/drive/MyDrive/Flickr8/Flicker8k_Dataset/"
-check_test(list(test_image_names), image_dict, image_dir, max_caption_words)
+# check_test(list(test_image_names), image_dict, image_dir, max_caption_words)
 
 def generate_caption(image_path, max_length):
       attention_plot = np.zeros((max_length, attention_features_shape))
@@ -579,8 +580,8 @@ def generate_caption(image_path, max_length):
       temp_input = tf.expand_dims(load_image(image_path)[0], 0)
       img_tensor_val = image_features_extract_model(temp_input)
       img_tensor_val = tf.reshape(img_tensor_val, (img_tensor_val.shape[0],
-      -1,
-      img_tensor_val.shape[3]))
+                                                      -1,
+                                                      img_tensor_val.shape[3]))
 
       features = encoder(img_tensor_val)
 
@@ -589,8 +590,8 @@ def generate_caption(image_path, max_length):
 
       for i in range(max_length):
             predictions, hidden, attention_weights = decoder(dec_input,
-            features,
-            hidden)
+                                                            features,
+                                                            hidden)
 
             attention_plot[i] = tf.reshape(attention_weights, (-1, )).numpy()
 
@@ -631,10 +632,10 @@ caption = ' '.join(result)
 
 # Convert the caption to an audio file
 tts = gTTS(caption)
-tts.save('/content/drive/MyDrive/Flickr8/caption.mp3')
+# tts.save('/content/drive/MyDrive/Flickr8/caption.mp3')
 
-# Play the audio file
-os.system('mpg321 caption.mp3')
+# # Play the audio file
+# os.system('mpg321 caption.mp3')
 
 # !sudo apt-get install -y xvfb x11-utils
 # !pip install pyvirtualdisplay
@@ -646,10 +647,12 @@ os.system('mpg321 caption.mp3')
 # from pydub.playback import play
 
 # def play_audio(audio_path):
-# audio = AudioSegment.from_file(audio_path)
-# audio.export("audio.wav", format="wav")
-# audio_file = open("audio.wav", "rb")
-# audio_bytes = audio_file.read()
-# audio_url = "data:audio/wav;base64," + b64encode(audio_bytes).decode()
-# eval_js(f'new Audio("{audio_url}").play()')
+#       audio = AudioSegment.from_file(audio_path)
+#       audio.export("audio.wav", format="wav")
+#       audio_file = open("audio.wav", "rb")
+#       audio_bytes = audio_file.read()
+#       audio_url = "data:audio/wav;base64," + b64encode(audio_bytes).decode()
+#       eval_js(f'new Audio("{audio_url}").play()')
+
+
 
