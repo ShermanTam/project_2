@@ -221,7 +221,8 @@ generator = ImageCaptionGenerator()
 generator.extract_image_features()
 
 # Load image features from a folder
-generator.load_image_features('image_features_folder')
+# generator.load_image_features('image_features_folder')
+generator.load_image_features("datasets/Flicker8k_Dataset")
 
 # Load captions data from a file
 # generator.load_captions_data('captions_data.csv')
