@@ -67,6 +67,10 @@ jobs:
         run: |
           python -m pip install --upgrade pipenv wheel gdown
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install -y libasound2-dev libao-dev
+
       - name: Install dependencies
         run: |
           pipenv install --deploy --dev --verbose
