@@ -137,13 +137,13 @@ class ImageCaptionGenerator:
     def define_model(self):
         # Image feature input
         inputs1 = Input(shape=(4096,))
-        x1 = Dropout(0.5)(inputs1)
+        x1 = Dropout(0.4)(inputs1)
         x2 = Dense(256, activation='relu')(x1)
 
         # Sequence input
         inputs2 = Input(shape=(self.max_length,))
         y1 = Embedding(self.vocab_size, 256, mask_zero=True)(inputs2)
-        y2 = Dropout(0.5)(y1)
+        y2 = Dropout(0.4)(y1)
         y3 = LSTM(256)(y2)
 
         # Decoder model
