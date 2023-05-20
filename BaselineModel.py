@@ -236,12 +236,16 @@ generator.define_model()
 # Train the model using the generated data
 print("Training the model:")
 
-print("\t Epoch number:", os.environ.get('EPOCH_NUMBER'))
-print("\t Batch number:", os.environ.get('BATCH_SIZE'))
+# Convert epoch number and batch size to integers
+epoch_number = int(os.environ.get('EPOCH_NUMBER'))
+batch_size = int(os.environ.get('BATCH_SIZE'))
+
+print("\t Epoch number:", epoch_number)
+print("\t Batch number:", batch_size)
 
 generator.model.fit([X_image_train, X_sequence_train], y_train, 
                     validation_data=([X_image_val, X_sequence_val], y_val),
-                    epochs=os.environ.get('EPOCH_NUMBER'), batch_size=os.environ.get('BATCH_SIZE'))
+                    epochs=epoch_number, batch_size=batch_size)
 
 print("Model trained for the specified number of epochs and batch size")
 
