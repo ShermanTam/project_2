@@ -70,6 +70,8 @@ jobs:
       - name: Install dependencies
         run: |
           pipenv install --deploy --dev --verbose
+          pipenv install gtts
+          sudo apt-get install -y mpg321
 
       - name: Download DS dataset
         run: |

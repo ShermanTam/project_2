@@ -157,11 +157,47 @@ class ImageCaptionGenerator:
             if idx == index:
                 return word
         return None
-    def evaluate_model(self, test_image_path):
+    # def evaluate_model(self, test_image_path):
+    #     # Load the test image
+    #     img = cv2.imread("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")
+    #     if img is None:
+    #         print("loading 1001773457_577c3a7d70.jpg for evaluation purpose")
+    #         return
+
+    #     # Preprocess the test image
+    #     target_size = (224, 224)
+    #     img = cv2.resize(img, target_size)
+    #     image = img_to_array(img)
+    #     image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+    #     image = preprocess_input(image)
+
+    #     # Generate image features using the pre-trained model
+    #     test_image_feature = self.model.predict(image, verbose=0)
+
+    #     # Generate a caption for the test image
+    #     start_token = self.tokenizer.word_index['startseq']
+    #     end_token = self.tokenizer.word_index['endseq']
+    #     caption = 'startseq'
+    #     for _ in range(self.max_length):
+    #         sequence = self.tokenizer.texts_to_sequences([caption])[0]
+    #         sequence = pad_sequences([sequence], maxlen=self.max_length)
+    #         yhat = self.model.predict([test_image_feature, sequence], verbose=0)
+    #         yhat = np.argmax(yhat)
+    #         word = self.get_word_from_index(yhat)
+    #         if word is None:
+    #             break
+    #         caption += ' ' + word
+    #         if yhat == end_token:
+    #             break
+
+    #     # Print the generated caption
+    #     print("Generated Caption:", caption)
+
+   def evaluate_model(self, test_image_path):
         # Load the test image
         img = cv2.imread("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")
         if img is None:
-            print("Trying to load test image to evaluate 1001773457_577c3a7d70.jpg")
+            print("loading 1001773457_577c3a7d70.jpg for evaluation purpose")
             return
 
         # Preprocess the test image
@@ -181,7 +217,10 @@ class ImageCaptionGenerator:
         for _ in range(self.max_length):
             sequence = self.tokenizer.texts_to_sequences([caption])[0]
             sequence = pad_sequences([sequence], maxlen=self.max_length)
+
+            # Modify the code to include the sequence tensor
             yhat = self.model.predict([test_image_feature, sequence], verbose=0)
+
             yhat = np.argmax(yhat)
             word = self.get_word_from_index(yhat)
             if word is None:
@@ -193,7 +232,20 @@ class ImageCaptionGenerator:
         # Print the generated caption
         print("Generated Caption:", caption)
 
-   
+        #play audio
+        from gtts import gTTS
+        import os
+
+        # Convert the caption to an audio file
+        tts = gTTS(caption)
+        tts.save("datasets/caption.mp3")
+
+        # Play the audio file
+        os.system('mpg321 datasets/caption.mp3')
+
+        
+
+
 
 
 # Instantiate the ImageCaptionGenerator
