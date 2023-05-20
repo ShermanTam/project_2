@@ -161,7 +161,7 @@ class ImageCaptionGenerator:
         # Load the test image
         img = cv2.imread("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")
         if img is None:
-            print("Error: Failed to load the test image.")
+            print("Trying to load test image to evaluate 1001773457_577c3a7d70.jpg")
             return
 
         # Preprocess the test image
