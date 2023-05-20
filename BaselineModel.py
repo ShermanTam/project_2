@@ -268,10 +268,10 @@ print("Model trained for the specified number of epochs and batch size")
 
 # Evaluate the model on the test set
 print("Evaluating the model on the test set")
-generator.model.evaluate([X_image_test, X_sequence_test], y_test, verbose=1)
-test_loss = generator.model.evaluate([X_image_test, X_sequence_test], y_test)
+
+test_loss = generator.model.evaluate([X_image_test, X_sequence_test], y_test, verbose=1)
 print("Test Loss:", test_loss)
 
-# Evaluate the model on a test image
-test_image_path = os.environ.get('TEST_IMAGE_PATH')
-generator.evaluate_model(test_image_path)
+# # Evaluate the model on a test image
+# test_image_path = os.environ.get('TEST_IMAGE_PATH')
+# generator.evaluate_model(test_image_path)
