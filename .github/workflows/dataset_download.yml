@@ -92,11 +92,12 @@ jobs:
           MODEL_TYPE: ${{ inputs.model_type }}
           EPOCH_NUMBER: ${{ inputs.epoch_number }}
           BATCH_SIZE: ${{ inputs.batch_size }}
+          TEST_IMAGE_NAME: "datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg"
         run: |
           if [[ "$MODEL_TYPE" == "LSTM" ]]; then
-            pipenv run python BaselineModel.py $EPOCH_NUMBER $BATCH_SIZE
+            pipenv run python BaselineModel.py $EPOCH_NUMBER $BATCH_SIZE $TEST_IMAGE_NAME
           elif [[ "$MODEL_TYPE" == "Attention" ]]; then
-            pipenv run python ImageCaptionGenerator.py $EPOCH_NUMBER $BATCH_SIZE
+            pipenv run python ImageCaptionGenerator.py $EPOCH_NUMBER $BATCH_SIZE $TEST_IMAGE_NAME
           else
             echo "Invalid MODEL_TYPE specified."
             exit 1

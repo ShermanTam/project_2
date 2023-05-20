@@ -14,9 +14,6 @@ from nltk.translate.bleu_score import corpus_bleu
 import zipfile
 from sklearn.model_selection import train_test_split
 
-print("Epoch number:", os.environ.get('EPOCH_NUMBER'))
-print("Batch number:", os.environ.get('BATCH_SIZE'))
-print("Model Type:",  os.environ.get('MODEL_TYPE'))
 
 class ImageCaptionGenerator:
     def __init__(self):
@@ -52,7 +49,6 @@ class ImageCaptionGenerator:
             image_id = file.split('.')[0]
             features[image_id] = feature
 
-        print("Features extracted:",features)
         self.features = features
 
     def save_image_features(self, file_path):
@@ -155,49 +151,50 @@ class ImageCaptionGenerator:
         model.compile(loss='categorical_crossentropy', optimizer='adam')
 
         self.model = model
+        
+        
+    def evaluate_model(self, test_image_path):
+        # Load the test image
+        img = cv2.imread(test_image_path)
+        if img is None:
+            print("Error: Failed to load the test image.")
+            return
 
-    def generate_caption(self, photo):
-        # Preprocess the image
-        img = load_img(photo, target_size=(224, 224))
-        img = img_to_array(img)
-        img = img.reshape((1, img.shape[0], img.shape[1], img.shape[2]))
-        img = preprocess_input(img)
+        # Preprocess the test image
+        target_size = (224, 224)
+        img = cv2.resize(img, target_size)
+        image = img_to_array(img)
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        image = preprocess_input(image)
 
-        # Extract features from the image
-        feature = self.model.predict(img, verbose=0)
+        # Generate image features using the pre-trained model
+        test_image_feature = self.model.predict(image, verbose=0)
 
-        # Generate a sequence of integers
-        sequence = [self.tokenizer.word_index['startseq']]
-
-        # Generate the caption word by word
+        # Generate a caption for the test image
+        start_token = self.tokenizer.word_index['startseq']
+        end_token = self.tokenizer.word_index['endseq']
+        caption = 'startseq'
         for _ in range(self.max_length):
-            # Pad the sequence
+            sequence = self.tokenizer.texts_to_sequences([caption])[0]
             sequence = pad_sequences([sequence], maxlen=self.max_length)
-
-            # Predict the next word
-            yhat = self.model.predict([feature, sequence], verbose=0)
-
-            # Convert probability to integer index
+            yhat = self.model.predict([test_image_feature, sequence], verbose=0)
             yhat = np.argmax(yhat)
-
-            # Map integer index to word
-            word = self.tokenizer.index_word[yhat]
-
-            # Stop if we predict the end of the sequence
-            if word == 'endseq':
+            word = self.get_word_from_index(yhat)
+            if word is None:
+                break
+            caption += ' ' + word
+            if yhat == end_token:
                 break
 
-            # Append the predicted word to the sequence
-            sequence[0].append(yhat)
+        # Print the generated caption
+        print("Generated Caption:", caption)
 
-        # Remove start and end tokens from the sequence
-        caption = sequence[0][1:-1]
+    def get_word_from_index(self, index):
+        for word, idx in self.tokenizer.word_index.items():
+            if idx == index:
+                return word
+        return None
 
-        # Convert the sequence of integers to a caption
-        caption = [self.tokenizer.index_word[word] for word in caption]
-        caption = ' '.join(caption)
-
-        return caption
 
 # Instantiate the ImageCaptionGenerator
 generator = ImageCaptionGenerator()
@@ -237,12 +234,15 @@ X_image_train, X_image_val, X_sequence_train, X_sequence_val, y_train, y_val = t
 generator.define_model()
 
 # Train the model using the generated data
-print("Training the model")
-generator.model.fit([X_image_train, X_sequence_train], y_train, batch_size=32, epochs=10, verbose=1,
-                    validation_data=([X_image_val, X_sequence_val], y_val))
+print("Training the model:")
+
+print("\t Epoch number:", os.environ.get('EPOCH_NUMBER'))
+print("\t Batch number:", os.environ.get('BATCH_SIZE'))
+
 generator.model.fit([X_image_train, X_sequence_train], y_train, 
                     validation_data=([X_image_val, X_sequence_val], y_val),
-                    epochs=10, batch_size=64)
+                    epochs=os.environ.get('EPOCH_NUMBER'), batch_size=os.environ.get('BATCH_SIZE'))
+
 print("Model trained for the specified number of epochs and batch size")
 
 # Evaluate the model on the test set
@@ -250,3 +250,7 @@ print("Evaluating the model on the test set")
 generator.model.evaluate([X_image_test, X_sequence_test], y_test, verbose=1)
 test_loss = generator.model.evaluate([X_image_test, X_sequence_test], y_test)
 print("Test Loss:", test_loss)
+
+# Evaluate the model on a test image
+test_image_path = os.environ.get('TEST_IMAGE_PATH')
+generator.evaluate_model(test_image_path)
