@@ -13,6 +13,9 @@ pad-sequences = "*"
 keras = "*"
 "keras.preprocessing" = "*"
 tensorflow-io = "*"
+opencv-python = "*"
+nltk = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
