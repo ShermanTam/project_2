@@ -101,6 +101,9 @@ class ImageCaptionGenerator:
 
         tokenizer = Tokenizer()
         tokenizer.fit_on_texts(all_captions)
+        # Add the start sequence token to the word index
+        tokenizer.word_index['startseq'] = len(tokenizer.word_index) + 1
+        tokenizer.word_index['endseq'] = len(tokenizer.word_index) + 1
         self.tokenizer = tokenizer
         self.vocab_size = len(tokenizer.word_index) + 1
 
