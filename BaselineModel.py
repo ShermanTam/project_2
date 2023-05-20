@@ -152,10 +152,14 @@ class ImageCaptionGenerator:
 
         self.model = model
         
-        
+    def get_word_from_index(self, index):
+        for word, idx in self.tokenizer.word_index.items():
+            if idx == index:
+                return word
+        return None
     def evaluate_model(self, test_image_path):
         # Load the test image
-        img = cv2.imread(test_image_path)
+        img = cv2.imread("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")
         if img is None:
             print("Error: Failed to load the test image.")
             return
@@ -189,11 +193,7 @@ class ImageCaptionGenerator:
         # Print the generated caption
         print("Generated Caption:", caption)
 
-    def get_word_from_index(self, index):
-        for word, idx in self.tokenizer.word_index.items():
-            if idx == index:
-                return word
-        return None
+   
 
 
 # Instantiate the ImageCaptionGenerator
