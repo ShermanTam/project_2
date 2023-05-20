@@ -18,6 +18,8 @@ from sklearn.model_selection import train_test_split
 class ImageCaptionGenerator:
     def __init__(self):
         self.model = None
+        self.encoder=None
+        self.decoder = None
         self.tokenizer = None
         self.max_length = None
         self.vocab_size = None
@@ -29,7 +31,7 @@ class ImageCaptionGenerator:
         model = VGG16()
         # Restructure the model
         model = Model(inputs=model.inputs, outputs=model.layers[-2].output)
-        self.model = model
+        self.encoder = model
 
     def load_image_features(self, folder_path):
         file_names = os.listdir(folder_path)
@@ -45,7 +47,7 @@ class ImageCaptionGenerator:
             image = img_to_array(img)
             image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
             image = preprocess_input(image)
-            feature = self.model.predict(image, verbose=0)
+            feature = self.encoder.predict(image, verbose=0)
             image_id = file.split('.')[0]
             features[image_id] = feature
 
@@ -150,7 +152,7 @@ class ImageCaptionGenerator:
         model = Model(inputs=[inputs1, inputs2], outputs=outputs)
         model.compile(loss='categorical_crossentropy', optimizer='adam')
 
-        self.model = model
+        self.decoder = model
         
     def get_word_from_index(self, index):
         for word, idx in self.tokenizer.word_index.items():
@@ -160,9 +162,9 @@ class ImageCaptionGenerator:
     
     def evaluate_model(self, test_image_path):
         # Load the test image
-        img = cv2.imread("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")
+        img = cv2.imread(test_image_path)
         if img is None:
-            print("loading 1001773457_577c3a7d70.jpg for evaluation purpose")
+            print(f"Failed to load the test image from path: {test_image_path}")
             return
 
         # Preprocess the test image
@@ -173,7 +175,7 @@ class ImageCaptionGenerator:
         image = preprocess_input(image)
 
         # Generate image features using the pre-trained model
-        test_image_feature = self.model.predict(image, verbose=0)
+        test_image_feature = self.encoder.predict(image, verbose=0)
 
         # Generate a caption for the test image
         start_token = self.tokenizer.word_index['startseq']
@@ -184,7 +186,7 @@ class ImageCaptionGenerator:
             sequence = pad_sequences([sequence], maxlen=self.max_length)
 
             # Modify the code to include the sequence tensor
-            yhat = self.model.predict([test_image_feature, sequence], verbose=0)
+            yhat = self.decoder.predict([test_image_feature, sequence], verbose=0)
 
             yhat = np.argmax(yhat)
             word = self.get_word_from_index(yhat)
@@ -197,7 +199,7 @@ class ImageCaptionGenerator:
         # Print the generated caption
         print("Generated Caption:", caption)
 
-        #play audio
+        # Play audio
         from gtts import gTTS
         import os
 
@@ -207,6 +209,7 @@ class ImageCaptionGenerator:
 
         # Play the audio file
         os.system('mpg321 datasets/caption.mp3')
+
 
         
 
@@ -260,7 +263,7 @@ batch_size = int(os.environ.get('BATCH_SIZE'))
 print("\t Epoch number:", epoch_number)
 print("\t Batch number:", batch_size)
 
-generator.model.fit([X_image_train, X_sequence_train], y_train, 
+generator.decoder.fit([X_image_train, X_sequence_train], y_train, 
                     validation_data=([X_image_val, X_sequence_val], y_val),
                     epochs=epoch_number, batch_size=batch_size)
 
@@ -269,9 +272,10 @@ print("Model trained for the specified number of epochs and batch size")
 # Evaluate the model on the test set
 print("Evaluating the model on the test set")
 
-test_loss = generator.model.evaluate([X_image_test, X_sequence_test], y_test, verbose=1)
+test_loss = generator.decoder.evaluate([X_image_test, X_sequence_test], y_test, verbose=1)
 print("Test Loss:", test_loss)
 
-# # Evaluate the model on a test image
-# test_image_path = os.environ.get('TEST_IMAGE_PATH')
-# generator.evaluate_model(test_image_path)
+
+
+# Evaluate the model on a test image
+generator.evaluate_model("datasets/Flicker8k_Dataset/1001773457_577c3a7d70.jpg")

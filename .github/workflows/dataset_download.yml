@@ -89,6 +89,9 @@ jobs:
           chmod +x scripts/ 
           ./scripts/check_file_exists.sh datasets/*.zip
 
+      - name: Set write permissions for datasets directory
+        run: chmod -R +w datasets
+
       - name: Run Python script
         env:
           MODEL_TYPE: ${{ inputs.model_type }}
