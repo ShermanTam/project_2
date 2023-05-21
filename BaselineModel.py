@@ -144,15 +144,6 @@ class ImageCaptionGenerator:
 #-----------------------------------------------------------------
 
     def clean_captions(self):
-         """
-        This function cleans the captions data
-
-        Arguments:
-        - self: ImageCaptionGenerator class variables
-    
-        Explanation:
-        This function cleans the extracted captions data 
-        """
         for key, captions in self.mapping.items():
             for i in range(len(captions)):
                 caption = captions[i]
