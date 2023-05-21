@@ -1,3 +1,7 @@
+
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
 import os
 import pickle
 import numpy as np
@@ -15,8 +19,26 @@ import zipfile
 from sklearn.model_selection import train_test_split
 
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
+
 class ImageCaptionGenerator:
+
+
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def __init__(self):
+        """
+        Class variables initialization
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+
+        Explanation:
+        This function initializes common class variables
+        """
         self.model = None
         self.encoder=None
         self.decoder = None
@@ -26,14 +48,42 @@ class ImageCaptionGenerator:
         self.features = None
         self.mapping = None
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def extract_image_features(self):
+        """
+        This function frames the encoder model VGG16 
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+
+        Explanation:
+        Prebuilt VGG16 encoder model is implemented in this function
+        & assigned in the variable encoder of the class
+        """
         # Load VGG16 model
         model = VGG16()
         # Restructure the model
         model = Model(inputs=model.inputs, outputs=model.layers[-2].output)
         self.encoder = model
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def load_image_features(self, folder_path):
+        """
+        This function extracts important features from the input images 
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        - folder_path: folder path where the images are stored
+
+        Explanation:
+        This function extracts the features from the input images with the help of 
+        the VGG16 model and saves them into a variable called features of the 
+        ImageCaptionGenerator class
+        """
         file_names = os.listdir(folder_path)
         features = {}  # Initialize an empty dictionary to store image features
         for file in tqdm(file_names):
@@ -53,15 +103,23 @@ class ImageCaptionGenerator:
 
         self.features = features
 
-    def save_image_features(self, file_path):
-        pickle.dump(self.features, open(file_path, 'wb'))
 
-    def load_image_features_from_file(self, file_path):
-        with open(file_path, 'rb') as f:
-            self.features = pickle.load(f)
-
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
 
     def load_captions_data(self,zip_file_path,file_to_access):
+        """
+        This function extracts the captions data
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        - zip_file_path: folder path where the captions are stored
+        - file_to_access: file name to be accessed for the captions to be generated
+
+        Explanation:
+        This function extracts the captions from the captions zip file in the dataset
+        and saves in a variable called mapping
+        """
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             with zip_ref.open(file_to_access) as file:
                 content = file.read().decode('utf-8')
@@ -82,7 +140,19 @@ class ImageCaptionGenerator:
 
         self.mapping = mapping
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def clean_captions(self):
+         """
+        This function cleans the captions data
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+    
+        Explanation:
+        This function cleans the extracted captions data 
+        """
         for key, captions in self.mapping.items():
             for i in range(len(captions)):
                 caption = captions[i]
@@ -94,7 +164,16 @@ class ImageCaptionGenerator:
                 # Update the cleaned caption
                 captions[i] = caption
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def create_tokenizer(self):
+        """
+        This function creates tokenizer
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        """
         all_captions = []
         for key, captions in self.mapping.items():
             all_captions.extend(captions)
@@ -107,7 +186,16 @@ class ImageCaptionGenerator:
         self.tokenizer = tokenizer
         self.vocab_size = len(tokenizer.word_index) + 1
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def create_sequences(self):
+        """
+        This function provides padded sequences
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        """
         sequences = []
         for key, captions in self.mapping.items():
             for caption in captions:
@@ -122,6 +210,9 @@ class ImageCaptionGenerator:
 
         return sequences
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def generate_data(self, sequences):
         X_image, X_sequence, y = [], [], []
         for key, in_seq, out_seq in sequences:
@@ -134,7 +225,16 @@ class ImageCaptionGenerator:
 
         return np.array(X_image), np.array(X_sequence), np.array(y)
 
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+
     def define_model(self):
+        """
+        This function provides structure of decoder model
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        """
         # Image feature input
         inputs1 = Input(shape=(4096,))
         x1 = Dropout(0.4)(inputs1)
@@ -156,14 +256,26 @@ class ImageCaptionGenerator:
         model.compile(loss='categorical_crossentropy', optimizer='adam')
 
         self.decoder = model
+
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
         
     def get_word_from_index(self, index):
         for word, idx in self.tokenizer.word_index.items():
             if idx == index:
                 return word
         return None
+
+
     
     def evaluate_model(self, test_image_path):
+        """
+        This function is used for evaluating the model
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        - test_image_path: path for testing the image
+        """
         # Load the test image
         img = cv2.imread(test_image_path)
         if img is None:
@@ -202,7 +314,17 @@ class ImageCaptionGenerator:
         # Print the generated caption
         print("Generated Caption:", caption)
 
-        # Play audio
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+    def play_audio(caption):
+        """
+        This function is used for getting the caption and for playing the audio
+
+        Arguments:
+        - self: ImageCaptionGenerator class variables
+        - test_image_path: path for testing the image
+        """
+        ##code for audio generation part
         from gtts import gTTS
         import os
 
@@ -268,7 +390,7 @@ print("\t Batch number:", batch_size)
 
 generator.decoder.fit([X_image_train, X_sequence_train], y_train, 
                     validation_data=([X_image_val, X_sequence_val], y_val),
-                    epochs=epoch_number, batch_size=batch_size)
+                    epochs=epoch_number, batch_size=batch_size,verbose=1)
 
 print("Model trained for the specified number of epochs and batch size")
 
