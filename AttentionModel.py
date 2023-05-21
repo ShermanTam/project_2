@@ -304,6 +304,12 @@ class ImageCaptioning():
         return array(X), array(y)
         return X, y
 
+    def map_func(self,img_name, cap):
+        img_name_parts = img_name.split(b"Dataset")
+        img_name = img_name_parts[0] + b"Dataset/" + img_name_parts[1]
+        img_tensor = np.load(img_name.decode('utf-8') + '.npy')
+        return img_tensor, cap
+
     def loss_function(self,real, pred):
         mask = tf.math.logical_not(tf.math.equal(real, 0))
         loss_ = loss_object(real, pred)
