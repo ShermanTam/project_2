@@ -566,8 +566,13 @@ def check_test(test_image_names, image_dict, image_dir, max_caption_words):
       #display(Image(image_path))
       print('Real Caption:', real_caption)
       print('Prediction Caption:', ' '.join(result))
+
+print("Retrieving names of training images from text file")
+training_imgname_doc = load_captions("datasets/download_ds_file.zip","Flickr_8k.trainImages.txt")
+training_image_names = subset_image_name (training_imgname_doc)
       
 test_image_name_file = "/content/drive/MyDrive/Flickr8/Flickr8k_text/Flickr_8k.testImages.txt"
+test_image_name_file = "datasets/download_ds_file.zip","Flickr8k.token.txt"
 test_image_names = subset_image_name_test(test_image_name_file)
 image_dir = "/content/drive/MyDrive/Flickr8/Flicker8k_Dataset/"
 # check_test(list(test_image_names), image_dict, image_dir, max_caption_words)

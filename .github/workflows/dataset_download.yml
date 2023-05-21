@@ -109,7 +109,7 @@ jobs:
           if [[ "$MODEL_TYPE" == "LSTM" ]]; then
             pipenv run python BaselineModel.py $EPOCH_NUMBER $BATCH_SIZE $TEST_IMAGE_NAME
           elif [[ "$MODEL_TYPE" == "Attention" ]]; then
-            pipenv run python ImageCaptionGenerator.py $EPOCH_NUMBER $BATCH_SIZE $TEST_IMAGE_NAME
+            pipenv run python AttentionModel.py $EPOCH_NUMBER $BATCH_SIZE $TEST_IMAGE_NAME
           else
             echo "Invalid MODEL_TYPE specified."
             exit 1
