@@ -298,7 +298,7 @@ class ImageCaptioning():
                 # Pad the input text to the same fixed length
                 pad_idxs = self.pad_text(word_idxs, max_length)
                         
-                 X.append(image_name)
+                X.append(image_name)
                 y.append(pad_idxs)
             
         return array(X), array(y)
