@@ -387,15 +387,22 @@ class ImageCaptioning():
         # captions on the validation set
         rid = np.random.randint(0, len(test_image_names))
         image_name = test_image_names[rid]
-        real_caption = image_dict[image_name]
+        # real_caption = image_dict[image_name]
+        if image_name in image_dict:
+            real_caption = image_dict[image_name]
+            image_path = image_dir + image_name + '.jpg'
+            result, attention_plot = self.evaluate(image_path, max_caption_words)
 
-        image_path = image_dir + image_name + '.jpg'
-        result, attention_plot = self.evaluate(image_path, max_caption_words)
+            #from IPython.display import Image, display
+            #display(Image(image_path))
+            print('Real Caption:', real_caption)
+            print('Prediction Caption:', ' '.join(result))
+    # Rest of your code
+        else:
+            print(f"Key '{image_name}' not found in image_dict.")
 
-        #from IPython.display import Image, display
-        #display(Image(image_path))
-        print('Real Caption:', real_caption)
-        print('Prediction Caption:', ' '.join(result))
+
+        
 
     def play_audio(self,max_caption_words):
         from gtts import gTTS
