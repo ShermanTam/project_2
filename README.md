@@ -16,3 +16,5 @@ downloading the dataset, preprocessing, training the model for the specified num
 epochs and batch size, and displaying the training results
 8. Once the workflow job finishes, you will see the build logo in green color, indicating the
 successful training of the model from the GitHub repository
+
+Note: For audio generation, please run the .py files separately in a different IDE.
