@@ -7,7 +7,7 @@ Click on it
 4. In the dropdown menu, set the respective values for the input parameters:
   a. **Model Type**: LSTM or Attention
   b. **Epoch Number**: 2, 5, 10, 20, 50, 70, 100
-5. Batch Size: 5, 10, 14, 20, 32, 64, 128
+  c. ** Batch Size**: 5, 10, 14, 20, 32, 64, 128
 6. The workflow will be triggered manually, and you can refresh the page to see the log of
 the current workflow run. On the log page, you will find a "Build" tab. Click on the
 "Build" tab to access the steps of the workflow
