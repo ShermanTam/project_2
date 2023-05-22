@@ -1,5 +1,8 @@
 # ImageCaptionGenerator
-Image captioning trained using LSTM and Attention models along with audio generation
+This repository contains code for training image captioning models using LSTM and Attention architectures, as well as audio generation capabilities.
+**Usage**
+To use the image captioning models, follow these steps:
+
 1. Click on the “Actions tab” in the Github repository
 2. Click on the workflow name, ImageCaptionGenerators, available on the left pane
 3. Once the workflow page opens, you will see a dropdown menu labeled "Run workflow."
