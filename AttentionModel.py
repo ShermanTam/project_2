@@ -382,6 +382,29 @@ class ImageCaptioning():
         attention_plot = attention_plot[:len(result), :]
         return result, attention_plot
 
+
+    def check_test(self,test_image_names, image_dict, image_dir, max_caption_words):
+        # captions on the validation set
+        rid = np.random.randint(0, len(test_image_names))
+        image_name = test_image_names[rid]
+        real_caption = image_dict[image_name]
+
+        image_path = image_dir + image_name + '.jpg'
+        result, attention_plot = self.evaluate(image_path, max_caption_words)
+
+        #from IPython.display import Image, display
+        #display(Image(image_path))
+        print('Real Caption:', real_caption)
+        print('Prediction Caption:', ' '.join(result))
+
+    def play_audio(self,max_caption_words):
+        from gtts import gTTS
+        import os
+        # Generate the caption
+        result, attention_plot = self.evaluate(image_path, max_caption_words)
+        caption = ' '.join(result)
+        # Convert the caption to an audio file
+        tts = gTTS(caption)
 #-----------------------------------------------------------------
 #-----------------------------------------------------------------
    
@@ -477,13 +500,13 @@ for epoch in range(start_epoch, epoch_number):
     print(f'Time taken for 1 epoch {time.time()-start:.2f} sec\n')
 
 
-# from gtts import gTTS
-# import os
+print("Evaluating the model with test set:")
+print("\t Retrieving test text files from zip folder")
+test_imgname_doc = attention.load_captions("datasets/download_ds_file.zip","Flickr_8k.trainImages.txt")
+test_image_dict = attention.captions_dict (test_imgname_doc)
+print("\t Retrieving names of testing images from text file")
+test_image_names = attention.subset_image_name(test_imgname_doc)
+check_test(list(test_image_names), test_image_dict, image_dir, max_caption_words)
 
 
-# # Generate the caption
-# result, attention_plot = evaluate(image_path, max_caption_words)
-# caption = ' '.join(result)
 
-# # Convert the caption to an audio file
-# tts = gTTS(caption)
