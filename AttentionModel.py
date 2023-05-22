@@ -506,7 +506,7 @@ test_imgname_doc = attention.load_captions("datasets/download_ds_file.zip","Flic
 test_image_dict = attention.captions_dict (test_imgname_doc)
 print("\t Retrieving names of testing images from text file")
 test_image_names = attention.subset_image_name(test_imgname_doc)
-check_test(list(test_image_names), test_image_dict, image_dir, max_caption_words)
+attention.check_test(list(test_image_names), test_image_dict, image_dir, max_caption_words)
 
 
 
