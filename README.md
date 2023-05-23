@@ -22,3 +22,12 @@ To use the image captioning models, follow these steps:
 Note: For audio generation, please run the .py files separately in a different Integrated Development Environment (IDE) or execution environment of your choice.
 
 
+# References
+Ayoub, S.; Gulzar, Y.; Reegu, F.A.; Turaev, S. Generating Image Captions Using Bahdanau Attention Mechanism and Transfer Learning. Symmetry 2022, 14, 2681. https://doi.org/10.3390/sym14122681
+Xu, K., Ba, J., Kiros, R., Cho, K., Courville, A., Salakhudinov, R., Zemel, R., & Bengio, Y. (2015). Show, Attend and Tell: Neural Image Caption Generation with Visual Attention. In International Conference on Machine Learning (Vol. 3, pp. 2048–2057). http://proceedings.mlr.press/v37/xuc15.pdf
+https://github.com/aswintechguy/Deep-Learning-Projects/blob/main/Image%20Caption%20Generator%20-%20Flickr%20Dataset/README.md
+Huang, L., Wang, W., Chen, J., & Wei, X. (2019). Attention on Attention for Image Captioning. https://doi.org/10.1109/iccv.2019.00473
+Dang, T., Oh, A., Na, I. S., & Kim, S. (2019). The Role of Attention Mechanism and Multi-Feature in Image Captioning. https://doi.org/10.1145/3310986.3311002
+Pan, Y., Yao, T., Li, Y., & Mei, T. (2020). X-Linear Attention Networks for Image Captioning. https://doi.org/10.1109/cvpr42600.2020.01098
+Cornia, M., Stefanini, M., Baraldi, L., & Cucchiara, R. (2020). Meshed-Memory Transformer for Image Captioning. https://doi.org/10.1109/cvpr42600.2020.01059
+Kumar, D., Srivastava, V., Popescu, D., & Hemanth, D. J. (2022). Dual-Modal Transformer with Enhanced Inter- and Intra-Modality Interactions for Image Captioning. Applied Sciences, 12(13), 6733. https://doi.org/10.3390/app12136733
