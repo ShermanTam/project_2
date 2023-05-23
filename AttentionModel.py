@@ -113,6 +113,7 @@ class RNN_Decoder(tf.keras.Model):
 class ImageCaptioning():
     def __init__(self):
         self.tokenizer = Tokenizer()
+        self.image_features_extract_model=None
 
             
     def load_captions(self, zip_file_path,file_to_access):
@@ -216,7 +217,7 @@ class ImageCaptioning():
         hidden_layer = image_model.layers[-1].output
             
         print("Creating new model using the created input and output")
-        image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
+        self.image_features_extract_model = tf.keras.Model(new_input, hidden_layer)
             
         print("Creating training image path")
         training_image_paths = [image_dir +'/'+ name + '.jpg' for name in training_image_names]
@@ -234,7 +235,7 @@ class ImageCaptioning():
         print("Saving the features as Numpy file")
 
         for img, path in tqdm(image_dataset):
-            batch_features = image_features_extract_model(img)
+            batch_features = self.image_features_extract_model(img)
                   
             batch_features = tf.reshape(batch_features, (batch_features.shape[0], -1, batch_features.shape[3]))
                   
@@ -390,7 +391,7 @@ class ImageCaptioning():
         # real_caption = image_dict[image_name]
         if image_name in image_dict:
             real_caption = image_dict[image_name]
-            image_path = image_dir+'/'+image_name + '.jpg'
+            image_path = image_dir +'/'+image_name + '.jpg'
             result, attention_plot = self.evaluate(image_path, max_caption_words)
 
             #from IPython.display import Image, display
